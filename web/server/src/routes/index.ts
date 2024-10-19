@@ -1,7 +1,10 @@
 import { Request, Response, Router } from "express";
+import { prisma } from "../repositories/prisma";
 
 export const indexRouter = Router();
 
-indexRouter.get("/", (req: Request, res: Response) => {
+indexRouter.get("/", async (req: Request, res: Response) => {
+    const jobs = await prisma.job.findMany();
+    console.log(jobs);
     res.send("APEX CARE SOLUTIONS API");
 });
