@@ -1,4 +1,3 @@
-# Dockerfile.server
 # Use official Node.js image for server
 FROM node:18-alpine
 
@@ -9,14 +8,20 @@ WORKDIR /app
 COPY web/server/package.json web/server/package-lock.json ./
 RUN npm install
 
+# Install Prisma CLI (only needed during development)
+RUN npm install prisma --save-dev
+
+# Install Prisma Client
+RUN npm install @prisma/client
+
+# Copy Prisma schema and migrations files
+COPY prisma ./prisma
+
 # Copy all server files
 COPY web/server ./
-
-# Build the server
-RUN npm run build
 
 # Expose the port the server will run on
 EXPOSE 3000
 
-# Command to run the server
-CMD ["npm", "start"]
+# Command to generate Prisma Client and run migrations
+CMD ["npm", "run", "migrate-deploy"]
