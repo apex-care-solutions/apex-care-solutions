@@ -1,0 +1,28 @@
+services:
+    postgres:
+        image: postgres:15-alpine
+        container_name: apex_care_db
+        environment:
+            POSTGRES_USER: apexcareadmin
+            POSTGRES_PASSWORD: apexcareadmin
+            POSTGRES_DB: apex_care_db
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile.server
+        container_name: server_app
+        environment:
+            DATABASE_URL: postgres://apexcareadmin:apexcareadmin@postgres:5432/apex_care_db
+            PORT: 3333
+        depends_on:
+            - postgres
+        ports:
+            - "3333:3333"
+
+volumes:
+    postgres_data:

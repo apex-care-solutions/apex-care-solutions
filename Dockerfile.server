@@ -1,0 +1,22 @@
+# Dockerfile.server
+# Use official Node.js image for server
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY web/server/package.json web/server/package-lock.json ./
+RUN npm install
+
+# Copy all server files
+COPY web/server ./
+
+# Build the server
+RUN npm run build
+
+# Expose the port the server will run on
+EXPOSE 3000
+
+# Command to run the server
+CMD ["npm", "start"]
