@@ -1,5 +1,5 @@
-function requireEnv(varName: string, defaultValue?: string | number) {
-    let envVar = process.env[varName];
+function requireEnv<T>(varName: string, defaultValue: T): T {
+    let envVar = process.env[varName] as T;
     if (!envVar) {
         console.warn(
             `Environment variable \`${varName}\` is not set.\nReverting to default.`,
@@ -14,4 +14,5 @@ function requireEnv(varName: string, defaultValue?: string | number) {
     return envVar;
 }
 
-export const PORT = requireEnv("PORT", 3333);
+export const PORT = requireEnv<number>("PORT", 3333);
+export const HOST = requireEnv<string>("HOST", "0.0.0.0");
