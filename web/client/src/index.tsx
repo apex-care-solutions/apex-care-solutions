@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { CoreNavigation } from "./features/core";
-import "@/globals.css";
+import { App } from "./App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <CoreNavigation />
+        <App />
     </React.StrictMode>,
 );

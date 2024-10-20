@@ -1,5 +1,7 @@
-export function Nav(){
+export function Nav() {
     return (
-        <nav></nav>
-    )
+        <nav>
+            <img src="/assets/logo/apex-care-minimal.svg"></img>
+        </nav>
+    );
 }
