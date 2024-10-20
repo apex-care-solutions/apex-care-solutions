@@ -1,5 +1,5 @@
 # Use official Node.js image for server
-FROM node:18-alpine
+FROM node:18
 
 # Set working directory
 WORKDIR /app
@@ -8,20 +8,18 @@ WORKDIR /app
 COPY web/server/package.json web/server/package-lock.json ./
 RUN npm install
 
-# Install Prisma CLI (only needed during development)
-RUN npm install prisma --save-dev
-
-# Install Prisma Client
+# Install Prisma Client and dev dependencies
 RUN npm install @prisma/client
+RUN npm install --save-dev nodemon prisma
 
-# Copy Prisma schema and migrations files
-COPY prisma ./prisma
+# Copy Prisma schema and migration files
+COPY web/server/prisma ./prisma
 
 # Copy all server files
 COPY web/server ./
 
 # Expose the port the server will run on
-EXPOSE 3000
+EXPOSE 3333
 
-# Command to generate Prisma Client and run migrations
-CMD ["npm", "run", "migrate-deploy"]
+# Command to run Prisma migrations and start the server using nodemon
+CMD ["npx", "nodemon", "--watch", "src", "--exec", "npm run migrate-deploy && npm start"]

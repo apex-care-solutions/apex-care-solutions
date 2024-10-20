@@ -1,23 +1,19 @@
 # Dockerfile.client
-# Use official Node.js image for client
-FROM node:18-alpine AS builder
+# Use official Node.js image for the client
+FROM node:18
 
 # Set working directory
 WORKDIR /app
 
 # Install dependencies
-COPY web/client/package.json web/client/package-lock.json ./
+COPY web/client/package.json .
+
 RUN npm install
 
 # Copy all files to the container
-COPY web/client ./
+COPY web/client .
 
-# Build the client
-RUN npm run build
-
-# Serve the client using a lightweight HTTP server
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Expose the default port
 EXPOSE 3003
+
+# Run development server with hot-reloading for client
+CMD ["npm", "run", "dev"]
