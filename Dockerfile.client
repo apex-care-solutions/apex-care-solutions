@@ -3,10 +3,10 @@
 FROM node:18
 
 # Set working directory
-WORKDIR /app
+WORKDIR /app/client
 
 # Install dependencies
-COPY web/client/package.json .
+COPY web/client/package*.json .
 
 RUN npm install
 
