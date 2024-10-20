@@ -4,9 +4,9 @@
     "main": "./src/index.ts",
     "scripts": {
         "build": "npx tsc",
+        "migrate-deploy": "prisma generate && prisma migrate deploy",
         "start": "node dist/index.js",
-        "dev": "nodemon ./src/index.ts",
-        "migrate-deploy": "npx prisma migrate deploy && npx prisma generate && npm start"
+        "dev": "nodemon --watch src --exec npm run migrate-deploy"
     },
     "keywords": [],
     "author": "",
