@@ -18,7 +18,6 @@ services:
         volumes:
             - ./web/server:/app/server
             - server_node_modules:/app/server/node_modules
-            - ./web/server/nodemon.json:/app/server/nodemon.json
         ports:
             - "3333:3333"
         environment:
