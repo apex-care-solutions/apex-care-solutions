@@ -13,12 +13,12 @@ model Client {
   LastName       String
   PhoneNumber    String
   Email          String
-  Requests       Request[]
+  Requests       JobRequest[]
   Subscriptions  Subscription[]
 }
 
-model Request {
-  RequestID      Int             @id @default(autoincrement())
+model JobRequest {
+  JobRequestID      Int             @id @default(autoincrement())
   Type           String
   Service        String
   Location       String
@@ -34,22 +34,22 @@ model Request {
 model RequestMessage {
   RequestMessageID Int           @id @default(autoincrement())
   Content          String
-  RequestID        Int
-  Request          Request        @relation(fields: [RequestID], references: [RequestID])
+  JobRequestID        Int
+  Request          JobRequest        @relation(fields: [JobRequestID], references: [JobRequestID])
 
-  @@index([RequestID])
+  @@index([JobRequestID])
 }
 
 model Job {
   JobID           Int             @id @default(autoincrement())
-  RequestID       Int
+  JobRequestID       Int
   TechnicianID    Int
   JobStatuses     JobStatus[]
   Reviews         Review[]
   Technician      Technician      @relation(fields: [TechnicianID], references: [TechnicianID])
-  Request         Request         @relation(fields: [RequestID], references: [RequestID])
+  Request         JobRequest         @relation(fields: [JobRequestID], references: [JobRequestID])
 
-  @@index([RequestID])
+  @@index([JobRequestID])
   @@index([TechnicianID])
 }
 
