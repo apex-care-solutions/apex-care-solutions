@@ -1,5 +1,14 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import {
+    loginUser,
+    registerUser,
+    logoutUser,
+} from "../controllers/auth-controller";
 
 export const authRouter = Router();
 
-authRouter.get("/", async (req: Request, res: Response) => {});
+authRouter.post("/auth", loginUser);
+
+authRouter.post("/auth", registerUser);
+
+authRouter.post("/auth", logoutUser);
