@@ -1,19 +1,21 @@
-import { jobsRoutes } from "./jobs-routes";
-import { packagesRoutes } from "./package-routes";
-import { requestsRoutes } from "./requests-routes";
-import { reviewsRoutes } from "./reviews-routes";
-import { servicesRoutes } from "./services-routes";
-import { subscriptionsRoutes } from "./subscriptions-routes";
-import { techniciansRoutes } from "./technicians-routes";
-import { usersRoutes } from "./users-routes";
+import { jobRoutes } from "./job-routes";
+import { packageRoutes } from "./package-routes";
+import { jobRequestRoutes } from "./job-request-routes";
+import { reviewRoutes } from "./review-routes";
+import { serviceRoutes } from "./service-routes";
+import { subscriptionRoutes } from "./subscription-routes";
+import { technicianRoutes } from "./technician-routes";
+import { userRoutes } from "./user-routes";
 
 export const apexCareRoutes = {
-    ...jobsRoutes,
-    ...packagesRoutes,
-    ...requestsRoutes,
-    ...reviewsRoutes,
-    ...servicesRoutes,
-    ...subscriptionsRoutes,
-    ...techniciansRoutes,
-    ...usersRoutes,
+    ...jobRoutes,
+    ...packageRoutes,
+    ...jobRequestRoutes,
+    ...reviewRoutes,
+    ...serviceRoutes,
+    ...subscriptionRoutes,
+    ...technicianRoutes,
+    ...userRoutes,
 } as const;
+
+export type ApexCareRoute = keyof typeof apexCareRoutes;

@@ -1,8 +1,11 @@
-import { PackageService } from "./package-service";
-
-export interface Service {
+export class Service {
     serviceId: string;
     name: string;
     description: string;
-    packages?: PackageService[];
+
+    constructor(serviceId: string, name: string, description: string) {
+        this.serviceId = serviceId;
+        this.name = name;
+        this.description = description;
+    }
 }

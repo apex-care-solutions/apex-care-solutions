@@ -1,10 +1,18 @@
-import { Subscription } from "./subscription";
-
-export interface User {
-    clientId: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
+export class User {
+    userId: string;
+    name: string;
     email: string;
-    subscription?: Subscription;
+    phoneNumber: string;
+
+    constructor(
+        userId: string,
+        name: string,
+        email: string,
+        phoneNumber: string,
+    ) {
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 }

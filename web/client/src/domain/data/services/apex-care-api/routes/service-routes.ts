@@ -1,4 +1,6 @@
-export const servicesRoutes = {
+import { ApiRoute } from "../../api-route";
+
+export const serviceRoutes: { [key: string]: ApiRoute } = {
     "GET /services": () => ({
         method: "GET",
         route: `/services`,
@@ -15,4 +17,6 @@ export const servicesRoutes = {
         method: "DELETE",
         route: `/services/${id}`,
     }),
-};
+} as const;
+
+export type ServiceRoute = keyof typeof serviceRoutes;

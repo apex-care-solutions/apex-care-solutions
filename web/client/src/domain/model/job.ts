@@ -1,10 +1,21 @@
-import { JobStatus } from "./job-status";
-import { Review } from "./review";
-
-export interface Job {
+export class Job {
     jobId: string;
-    requestId: string;
+    title: string;
+    description: string;
+    status: string;
     technicianId: string;
-    review?: Review;
-    statuses?: JobStatus[];
+
+    constructor(
+        jobId: string,
+        title: string,
+        description: string,
+        status: string,
+        technicianId: string,
+    ) {
+        this.jobId = jobId;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.technicianId = technicianId;
+    }
 }

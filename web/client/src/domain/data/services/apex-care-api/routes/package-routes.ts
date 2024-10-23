@@ -1,22 +1,13 @@
-export const packagesRoutes = {
-    "GET /packages": () => ({
-        method: "GET",
-        route: `/packages`,
-    }),
-    "GET /packages/:id": ({ id }: { id: string }) => ({
-        method: "GET",
-        route: `/packages/${id}`,
-    }),
-    "POST /packages": () => ({
-        method: "POST",
-        route: `/packages`,
-    }),
-    "PUT /packages/:id": ({ id }: { id: string }) => ({
-        method: "PUT",
-        route: `/packages/${id}`,
-    }),
-    "DELETE /packages/:id": ({ id }: { id: string }) => ({
-        method: "DELETE",
-        route: `/packages/${id}`,
-    }),
-};
+import { Package } from "@/domain/model/package";
+import {
+    ApiBaseRouteCollection,
+    ApiRoute,
+    implementBaseApi,
+} from "../../api-route";
+
+(typeof Package).toString();
+export const packageRoutes = {
+    ...implementBaseApi("packages"),
+} as const;
+
+export type PackageRoute = keyof typeof packageRoutes;

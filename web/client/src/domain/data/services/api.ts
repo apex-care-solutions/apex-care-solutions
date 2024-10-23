@@ -32,29 +32,45 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
         this.headers = headers || {};
     }
 
-    async request<Key extends keyof Routes>(
-        request: Key,
-        params?: Parameters<Routes[Key]>[0],
-        headers?: RequestHeaders,
-        data?: any,
-    ): Promise<any> {
-        const { method, route } = this.routes[request](params);
-
+    static async route<T>({
+        method,
+        url,
+        route,
+        query,
+        body,
+        headers,
+    }: {
+        method: string;
+        url: string;
+        route: string;
+        query?: any;
+        body?: any;
+        headers?: RequestHeaders;
+    }): Promise<T> {
         const options: RequestInit = {
             method,
             headers: {
-                ...this.headers,
                 ...headers,
             },
-            body: data ? JSON.stringify(data) : undefined,
+            body: body ? JSON.stringify(body) : undefined,
         };
 
-        const response = await fetch(this.baseUrl + route, options);
+        const response = await fetch(url + route, options);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return response.json();
+        return (await response.json()) as T;
+    }
+
+    async request<Key extends keyof Routes>(
+        request: Key,
+        params?: Parameters<Routes[Key]>[0],
+        headers?: RequestHeaders,
+        query?: any,
+        body?: any,
+    ): Promise<any> {
+        this.routes[request](this.baseUrl, params, query, body);
     }
 }
