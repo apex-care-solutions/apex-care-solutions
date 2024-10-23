@@ -1,6 +1,6 @@
-import { Login, Register } from "@/features/auth";
+import { Login, Register } from "@/presenter/features/auth";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { Home } from "@/features/core";
+import { Home } from "@/presenter/features/core";
 
 export function CoreNavigation() {
     return (

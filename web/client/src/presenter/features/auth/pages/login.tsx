@@ -1,5 +1,5 @@
 import { AuthContainer } from "../components/auth-container";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/presenter/components/ui/button";
 import "/src/globals.css";
 
 export function Login() {
@@ -26,7 +26,7 @@ export function Login() {
                     <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <Button variant="outline" size="default">
-                    <img src="/google.svg" alt="Google"/>
+                    <img src="/google.svg" alt="Google" />
                     Continue with google
                 </Button>
             </form>
@@ -35,7 +35,7 @@ export function Login() {
     return (
         <div>
             <AuthContainer>
-                <LoginForm/>
+                <LoginForm />
             </AuthContainer>
         </div>
     );
