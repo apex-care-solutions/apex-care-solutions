@@ -7,35 +7,20 @@ export interface IRepository<T> {
 }
 
 export abstract class Repository<T> implements IRepository<T> {
+    findAll(): Promise<T[]> {
+        throw new Error("Method not implemented.");
+    }
+    findById(id: string): Promise<T | null> {
+        throw new Error("Method not implemented.");
+    }
+    create(entity: T): Promise<T> {
+        throw new Error("Method not implemented.");
+    }
+    update(id: string, entity: Partial<T>): Promise<T | null> {
+        throw new Error("Method not implemented.");
+    }
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
     protected data: T[] = [];
-
-    async findAll(): Promise<T[]> {
-        return this.data;
-    }
-
-    async findById(id: string): Promise<T | null> {
-        const entity = this.data.find((item: any) => item.id === id);
-        return entity || null;
-    }
-
-    async create(entity: T): Promise<T> {
-        this.data.push(entity);
-        return entity;
-    }
-
-    async update(id: string, entity: Partial<T>): Promise<T | null> {
-        const index = this.data.findIndex((item: any) => item.id === id);
-        if (index === -1) return null;
-
-        this.data[index] = { ...this.data[index], ...entity };
-        return this.data[index];
-    }
-
-    async delete(id: string): Promise<boolean> {
-        const index = this.data.findIndex((item: any) => item.id === id);
-        if (index === -1) return false;
-
-        this.data.splice(index, 1);
-        return true;
-    }
 }

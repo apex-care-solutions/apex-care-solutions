@@ -5,68 +5,19 @@ import { IRepository } from "./repository";
 
 export class JobRepository implements IRepository<Job> {
     constructor(private apexCareApi: ApexCareApi) {}
-
-    async findAll(): Promise<Job[]> {
-        return await this.apexCareApi.request<JobRoute>("GET /jobs");
+    findAll(): Promise<Job[]> {
+        throw new Error("Method not implemented.");
     }
-
-    async findById(id: string): Promise<Job | null> {
-        try {
-            return await this.apexCareApi.request<JobRoute>("GET /jobs/:id", {
-                id,
-            });
-        } catch (error) {
-            console.error(`Failed to find job with ID ${id}:`, error);
-            return null;
-        }
+    findById(id: string): Promise<Job | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async create(entity: Job): Promise<Job> {
-        return await this.apexCareApi.request<JobRoute>(
-            "POST /jobs",
-            undefined,
-            undefined,
-            entity,
-        );
+    create(entity: Job): Promise<Job> {
+        throw new Error("Method not implemented.");
     }
-
-    async update(id: string, entity: Partial<Job>): Promise<Job | null> {
-        try {
-            return await this.apexCareApi.request<JobRoute>(
-                "PUT /jobs/:id",
-                { id },
-                undefined,
-                entity,
-            );
-        } catch (error) {
-            console.error(`Failed to update job with ID ${id}:`, error);
-            return null;
-        }
+    update(id: string, entity: Partial<Job>): Promise<Job | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async delete(id: string): Promise<boolean> {
-        try {
-            await this.apexCareApi.request<JobRoute>("DELETE /jobs/:id", {
-                id,
-            });
-            return true;
-        } catch (error) {
-            console.error(`Failed to delete job with ID ${id}:`, error);
-            return false;
-        }
-    }
-
-    async findByTechnicianId(technicianId: string): Promise<Job[]> {
-        return await this.apexCareApi.request<JobRoute>(
-            "GET /jobs/technician/:id",
-            { id: technicianId },
-        );
-    }
-
-    async findByRequestId(requestId: string): Promise<Job[]> {
-        return await this.apexCareApi.request<JobRoute>(
-            "GET /jobs/request/:id",
-            { id: requestId },
-        );
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 }

@@ -4,51 +4,19 @@ import { IRepository } from "./repository";
 
 export class TermRepository implements IRepository<Term> {
     constructor(private apexCareApi: ApexCareApi) {}
-
-    async findAll(): Promise<Term[]> {
-        return await this.apexCareApi.request<TermRoute>("GET /terms");
+    findAll(): Promise<Term[]> {
+        throw new Error("Method not implemented.");
     }
-
-    async findById(id: string): Promise<Term | null> {
-        try {
-            return await this.apexCareApi.request<TermRoute>("GET /terms/:id", {
-                id,
-            });
-        } catch {
-            return null;
-        }
+    findById(id: string): Promise<Term | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async create(entity: Term): Promise<Term> {
-        return await this.apexCareApi.request<TermRoute>(
-            "POST /terms",
-            undefined,
-            undefined,
-            entity,
-        );
+    create(entity: Term): Promise<Term> {
+        throw new Error("Method not implemented.");
     }
-
-    async update(id: string, entity: Partial<Term>): Promise<Term | null> {
-        try {
-            return await this.apexCareApi.request<TermRoute>(
-                "PUT /terms/:id",
-                { id },
-                undefined,
-                entity,
-            );
-        } catch {
-            return null;
-        }
+    update(id: string, entity: Partial<Term>): Promise<Term | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async delete(id: string): Promise<boolean> {
-        try {
-            await this.apexCareApi.request<TermRoute>("DELETE /terms/:id", {
-                id,
-            });
-            return true;
-        } catch {
-            return false;
-        }
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 }

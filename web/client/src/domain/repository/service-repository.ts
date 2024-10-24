@@ -5,58 +5,19 @@ import { IRepository } from "./repository";
 
 export class ServiceRepository implements IRepository<Service> {
     constructor(private apexCareApi: ApexCareApi) {}
-
-    async findAll(): Promise<Service[]> {
-        return await this.apexCareApi.request<ServiceRoute>(
-            "GET /services",
-        );
+    findAll(): Promise<Service[]> {
+        throw new Error("Method not implemented.");
     }
-
-    async findById(id: string): Promise<Service | null> {
-        try {
-            return await this.apexCareApi.request<ServiceRoute>(
-                "GET /services/:id",
-                { id },
-            );
-        } catch {
-            return null;
-        }
+    findById(id: string): Promise<Service | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async create(entity: Service): Promise<Service> {
-        return await this.apexCareApi.request<ServiceRoute>(
-            "POST /services",
-            undefined,
-            undefined,
-            entity,
-        );
+    create(entity: Service): Promise<Service> {
+        throw new Error("Method not implemented.");
     }
-
-    async update(
-        id: string,
-        entity: Partial<Service>,
-    ): Promise<Service | null> {
-        try {
-            return await this.apexCareApi.request<ServiceRoute>(
-                "PUT /services/:id",
-                { id },
-                undefined,
-                entity,
-            );
-        } catch {
-            return null;
-        }
+    update(id: string, entity: Partial<Service>): Promise<Service | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async delete(id: string): Promise<boolean> {
-        try {
-            await this.apexCareApi.request<ServiceRoute>(
-                "DELETE /services/:id",
-                { id },
-            );
-            return true;
-        } catch {
-            return false;
-        }
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 }

@@ -5,54 +5,19 @@ import { IRepository } from "./repository";
 
 export class UserRepository implements IRepository<User> {
     constructor(private apexCareApi: ApexCareApi) {}
-
-    async findAll(): Promise<User[]> {
-        return await this.apexCareApi.request<UserRoute>("GET /users");
+    findAll(): Promise<User[]> {
+        throw new Error("Method not implemented.");
     }
-
-    async findById(id: string): Promise<User | null> {
-        try {
-            return await this.apexCareApi.request<UserRoute>(
-                "GET /users/:id",
-                { id },
-            );
-        } catch {
-            return null;
-        }
+    findById(id: string): Promise<User | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async create(entity: User): Promise<User> {
-        return await this.apexCareApi.request<UserRoute>(
-            "POST /users",
-            undefined,
-            undefined,
-            entity,
-            
-        );
+    create(entity: User): Promise<User> {
+        throw new Error("Method not implemented.");
     }
-
-    async update(id: string, entity: Partial<User>): Promise<User | null> {
-        try {
-            return await this.apexCareApi.request<UserRoute>(
-                "PUT /users/:id",
-                { id },
-                undefined,
-                entity,
-            );
-        } catch {
-            return null;
-        }
+    update(id: string, entity: Partial<User>): Promise<User | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async delete(id: string): Promise<boolean> {
-        try {
-            await this.apexCareApi.request<UserRoute>(
-                "DELETE /users/:id",
-                { id },
-            );
-            return true;
-        } catch {
-            return false;
-        }
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 }

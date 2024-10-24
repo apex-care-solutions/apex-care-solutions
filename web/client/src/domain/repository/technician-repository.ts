@@ -5,58 +5,19 @@ import { IRepository } from "./repository";
 
 export class TechnicianRepository implements IRepository<Technician> {
     constructor(private apexCareApi: ApexCareApi) {}
-
-    async findAll(): Promise<Technician[]> {
-        return await this.apexCareApi.request<TechnicianRoute>(
-            "GET /technicians",
-        );
+    findAll(): Promise<Technician[]> {
+        throw new Error("Method not implemented.");
     }
-
-    async findById(id: string): Promise<Technician | null> {
-        try {
-            return await this.apexCareApi.request<TechnicianRoute>(
-                "GET /technicians/:id",
-                { id },
-            );
-        } catch {
-            return null;
-        }
+    findById(id: string): Promise<Technician | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async create(entity: Technician): Promise<Technician> {
-        return await this.apexCareApi.request<TechnicianRoute>(
-            "POST /technicians",
-            undefined,
-            undefined,
-            entity,
-        );
+    create(entity: Technician): Promise<Technician> {
+        throw new Error("Method not implemented.");
     }
-
-    async update(
-        id: string,
-        entity: Partial<Technician>,
-    ): Promise<Technician | null> {
-        try {
-            return await this.apexCareApi.request<TechnicianRoute>(
-                "PUT /technicians/:id",
-                { id },
-                undefined,
-                entity,
-            );
-        } catch {
-            return null;
-        }
+    update(id: string, entity: Partial<Technician>): Promise<Technician | null> {
+        throw new Error("Method not implemented.");
     }
-
-    async delete(id: string): Promise<boolean> {
-        try {
-            await this.apexCareApi.request<TechnicianRoute>(
-                "DELETE /technicians/:id",
-                { id },
-            );
-            return true;
-        } catch {
-            return false;
-        }
+    delete(id: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
     }
 }
