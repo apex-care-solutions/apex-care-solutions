@@ -1,25 +1,25 @@
 import { ApiRoute } from "./api-route";
 
 export interface RequestHeaders {
-    Authorization?: string; // Bearer token for authentication
-    "Content-Type"?: string; // e.g., application/json
-    Accept?: string; // e.g., application/json
-    "User-Agent"?: string; // Client software information
-    "Cache-Control"?: string; // Caching directives
-    "X-Request-ID"?: string; // Unique request identifier
-    Cookie?: string; // Stored cookies
+    Authorization?: string;
+    "Content-Type"?: string;
+    Accept?: string;
+    "User-Agent"?: string;
+    "Cache-Control"?: string;
+    "X-Request-ID"?: string;
+    Cookie?: string;
 }
 
 export interface ResponseHeaders {
-    "Content-Type"?: string; // e.g., application/json
-    "Content-Length"?: string; // Size of the response body
-    ETag?: string; // Unique identifier for a resource version
-    "Cache-Control"?: string; // Caching directives
-    Location?: string; // URL of the newly created resource
-    "Access-Control-Allow-Origin"?: string; // CORS header
-    "X-RateLimit-Limit"?: string; // Max requests allowed
-    "X-RateLimit-Remaining"?: string; // Remaining requests
-    "X-RateLimit-Reset"?: string; // When the rate limit resets
+    "Content-Type"?: string;
+    "Content-Length"?: string;
+    ETag?: string;
+    "Cache-Control"?: string;
+    Location?: string;
+    "Access-Control-Allow-Origin"?: string;
+    "X-RateLimit-Limit"?: string;
+    "X-RateLimit-Remaining"?: string;
+    "X-RateLimit-Reset"?: string;
 }
 
 export abstract class API<Routes extends Record<string, ApiRoute>> {
@@ -61,16 +61,22 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return (await response.json()) as T;
+        return response.json() as Promise<T>;
     }
 
     async request<Key extends keyof Routes>(
         request: Key,
-        params?: Parameters<Routes[Key]>[0],
+        params?: Parameters<Routes[Key]>[1],
+        query?: Parameters<Routes[Key]>[2],
+        body?: Parameters<Routes[Key]>[3],
         headers?: RequestHeaders,
-        query?: any,
-        body?: any,
-    ): Promise<any> {
-        this.routes[request](this.baseUrl, params, query, body);
+    ): Promise<ReturnType<Routes[Key]>> {
+        const routeHandler = this.routes[request];
+        return (await routeHandler(
+            this.baseUrl,
+            params,
+            query,
+            body,
+        )) as ReturnType<Routes[Key]>;
     }
 }

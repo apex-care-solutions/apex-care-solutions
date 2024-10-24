@@ -1,26 +1,44 @@
-import { ApiRoute } from "../../api-route";
+import { Technician } from "@/domain/model/technician";
+import { API } from "../../api";
+import { ApiBaseRouteCollection } from "../../api-route";
 
-export const technicianRoutes: { [key: string]: ApiRoute } = {
-    "GET /technicians": () => ({
-        method: "GET",
-        route: `/technicians`,
-    }),
-    "GET /technicians/:id": ({ id }: { id: string }) => ({
-        method: "GET",
-        route: `/technicians/${id}`,
-    }),
-    "POST /technicians": () => ({
-        method: "POST",
-        route: `/technicians`,
-    }),
-    "PUT /technicians/:id": ({ id }: { id: string }) => ({
-        method: "PUT",
-        route: `/technicians/${id}`,
-    }),
-    "DELETE /technicians/:id": ({ id }: { id: string }) => ({
-        method: "DELETE",
-        route: `/technicians/${id}`,
-    }),
-} as const;
+export const technicianRoutes = {
+    "GET /technicians": (url: string, query: { take: number; page: number }) =>
+        API.route({
+            url,
+            method: "GET",
+            route: `/technicians`,
+            query,
+        }),
+    "GET /technicians/:id": (url: string, { id }: { id: string }) =>
+        API.route({
+            url,
+            method: "GET",
+            route: `/technicians/${id}`,
+        }),
+    "POST /technicians": (url: string) =>
+        API.route<Technician[]>({
+            url,
+            method: "POST",
+            route: `/technicians`,
+        }),
+    "PUT /technicians/:id": (
+        url: string,
+        { id }: { id: string },
+        body: Technician,
+    ) =>
+        API.route<Technician>({
+            url,
+            method: "PUT",
+            route: `/technicians/${id}`,
+            body: body,
+        }),
+    "DELETE /technicians/:id": (url: string, { id }: { id: string }) =>
+        API.route({
+            url,
+            method: "DELETE",
+            route: `/technicians/${id}`,
+        }),
+} as const satisfies ApiBaseRouteCollection<"technicians">;
 
 export type TechnicianRoute = keyof typeof technicianRoutes;

@@ -1,5 +1,40 @@
-import { ApiRoute } from "../../api-route";
+import { Skill } from "@/domain/model/skill";
+import { API } from "../../api";
+import { ApiBaseRouteCollection } from "../../api-route";
 
-export const skillRoutes: { [key: string]: ApiRoute } = {};
+export const skillsRoutes = {
+    "GET /skills": (url: string, query: { take: number; page: number }) =>
+        API.route({
+            url,
+            method: "GET",
+            route: `/skills`,
+            query,
+        }),
+    "GET /skills/:id": (url: string, { id }: { id: string }) =>
+        API.route({
+            url,
+            method: "GET",
+            route: `/skills/${id}`,
+        }),
+    "POST /skills": (url: string) =>
+        API.route<SkillsRoute[]>({
+            url,
+            method: "POST",
+            route: `/skills`,
+        }),
+    "PUT /skills/:id": (url: string, { id }: { id: string }, body: Skill) =>
+        API.route<Skill>({
+            url,
+            method: "PUT",
+            route: `/skills/${id}`,
+            body: body,
+        }),
+    "DELETE /skills/:id": (url: string, { id }: { id: string }) =>
+        API.route({
+            url,
+            method: "DELETE",
+            route: `/skills/${id}`,
+        }),
+} as const satisfies ApiBaseRouteCollection<"skills">;
 
-export type SkillRoute = keyof typeof skillRoutes;
+export type SkillsRoute = keyof typeof skillsRoutes;
