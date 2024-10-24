@@ -11,10 +11,8 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/stats", indexRouter);
-
+app.use("/", indexRouter);
 
 app.listen(env.PORT, () => {
     console.log(`Server listening at http://localhost:${env.PORT}`);
 });
-
