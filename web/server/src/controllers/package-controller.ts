@@ -29,7 +29,10 @@ export const getPackageById = async (
     }
 };
 
-export const createPackage = async (req: Request, res: Response): Promise<void> => {
+export const createPackage = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     try {
         const newpackage = await addNewPackage(req.body);
         res.json(newpackage);
@@ -38,7 +41,10 @@ export const createPackage = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const updatePackage = async (req: Request, res: Response): Promise<void> => {
+export const updatePackage = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const updatedpackage = await modifyPackage(id, req.body);
@@ -51,35 +57,38 @@ export const updatePackage = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const deletePackage = async (req: Request, res: Response): Promise<void> => {
+export const deletePackage = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const deletedpackage = await removePackage(id);
         if (!deletedpackage) {
             res.status(404).json({ error: "package not found" });
         }
-        res.sendStatus(204).json({message: "Removed succesfully"});
+        res.sendStatus(204).json({ message: "Removed succesfully" });
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
 async function fetchAllPackages(): Promise<Package[]> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function fetchPackageById(id: string): Promise<Package> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function addNewPackage(packageData: any): Promise<Package> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function modifyPackage(id: string, packageData: any): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function removePackage(id: string): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }

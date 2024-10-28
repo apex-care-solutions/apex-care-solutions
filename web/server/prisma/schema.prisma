@@ -7,159 +7,168 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
-  ClientID       Int             @id @default(autoincrement())
-  FirstName      String
-  LastName       String
-  PhoneNumber    String
-  Email          String
-  Requests       JobRequest[]
-  Subscriptions  Subscription[]
+enum ContactMethod {
+  EMAIL
+  PHONE
+  SMS
+  NONE
+}
+
+model User {
+  id              Int             @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  phone           String
+  email           String
+  requests        JobRequest[]
+  subscriptions   Subscription[]
+  preferredContact ContactMethod  @default(EMAIL)
 }
 
 model JobRequest {
-  JobRequestID      Int             @id @default(autoincrement())
-  Type           String
-  Service        String
-  Location       String
-  Priority       String
-  ClientID       Int
-  Jobs           Job[]
-  RequestMessages RequestMessage[]
-  Client         Client          @relation(fields: [ClientID], references: [ClientID])
+  id              Int             @id @default(autoincrement())
+  type            String
+  service         String
+  location        String
+  priority        String
+  userId          Int
+  jobs            Job[]
+  requestMessages RequestMessage[]
+  user            User            @relation(fields: [userId], references: [id])
 
-  @@index([ClientID])
+  @@index([userId])
 }
 
 model RequestMessage {
-  RequestMessageID Int           @id @default(autoincrement())
-  Content          String
-  JobRequestID        Int
-  Request          JobRequest        @relation(fields: [JobRequestID], references: [JobRequestID])
+  id              Int             @id @default(autoincrement())
+  content         String
+  jobRequestId    Int
+  request         JobRequest      @relation(fields: [jobRequestId], references: [id])
 
-  @@index([JobRequestID])
+  @@index([jobRequestId])
 }
 
 model Job {
-  JobID           Int             @id @default(autoincrement())
-  JobRequestID       Int
-  TechnicianID    Int
-  JobStatuses     JobStatus[]
-  Reviews         Review[]
-  Technician      Technician      @relation(fields: [TechnicianID], references: [TechnicianID])
-  Request         JobRequest         @relation(fields: [JobRequestID], references: [JobRequestID])
+  id              Int             @id @default(autoincrement())
+  jobRequestId    Int
+  technicianId    Int
+  jobStatuses     JobStatus[]
+  reviews         Review[]
+  technician      Technician      @relation(fields: [technicianId], references: [id])
+  request         JobRequest      @relation(fields: [jobRequestId], references: [id])
 
-  @@index([JobRequestID])
-  @@index([TechnicianID])
+  @@index([jobRequestId])
+  @@index([technicianId])
 }
 
 model JobStatus {
-  JobStatusID     Int             @id @default(autoincrement())
-  Message         String
-  Status          String
-  Timestamp       DateTime        @default(now())
-  JobID           Int
-  Job             Job             @relation(fields: [JobID], references: [JobID])
+  id              Int             @id @default(autoincrement())
+  message         String
+  status          String
+  timestamp       DateTime        @default(now())
+  jobId           Int
+  job             Job             @relation(fields: [jobId], references: [id])
 
-  @@index([JobID])
+  @@index([jobId])
 }
 
 model Review {
-  ReviewID        Int             @id @default(autoincrement())
-  Feedback        String
-  Rating          Int
-  JobID           Int
-  Job             Job             @relation(fields: [JobID], references: [JobID])
+  id              Int             @id @default(autoincrement())
+  feedback        String
+  rating          Int
+  jobId           Int
+  job             Job             @relation(fields: [jobId], references: [id])
 
-  @@index([JobID])
+  @@index([jobId])
 }
 
 model Technician {
-  TechnicianID    Int             @id @default(autoincrement())
-  FirstName       String
-  LastName        String
-  Phone           String
-  Email           String
-  Location        String
-  Company         String
-  Jobs            Job[]
-  TechnicianSkills TechnicianSkill[]
+  id              Int             @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  phone           String
+  email           String
+  location        String
+  company         String
+  jobs            Job[]
+  technicianSkills TechnicianSkill[]
+  preferredContact ContactMethod  @default(EMAIL)
 }
 
 model TechnicianSkill {
-  TechnicianSkillID Int           @id @default(autoincrement())
-  TechnicianID      Int
-  SkillID           Int
-  Technician        Technician    @relation(fields: [TechnicianID], references: [TechnicianID])
-  Skill             Skill         @relation(fields: [SkillID], references: [SkillID])
+  id              Int             @id @default(autoincrement())
+  technicianId    Int
+  skillId         Int
+  technician      Technician      @relation(fields: [technicianId], references: [id])
+  skill           Skill           @relation(fields: [skillId], references: [id])
 
-  @@index([TechnicianID])
-  @@index([SkillID])
+  @@index([technicianId])
+  @@index([skillId])
 }
 
 model Skill {
-  SkillID         Int             @id @default(autoincrement())
-  Type            String
-  Description     String
-  TechnicianSkills TechnicianSkill[]
+  id              Int             @id @default(autoincrement())
+  type            String
+  description     String
+  technicianSkills TechnicianSkill[]
 }
 
 model Subscription {
-  SubscriptionID  Int             @id @default(autoincrement())
-  DateSubscribed  DateTime        @default(now())
-  ClientID        Int
-  TermID          Int
-  PackageID       Int
-  Client          Client          @relation(fields: [ClientID], references: [ClientID])
-  Term            Term            @relation(fields: [TermID], references: [TermID])
-  Package         Package         @relation(fields: [PackageID], references: [PackageID])
+  id              Int             @id @default(autoincrement())
+  dateSubscribed  DateTime        @default(now())
+  userId          Int
+  termId          Int
+  packageId       Int
+  user            User            @relation(fields: [userId], references: [id])
+  term            Term            @relation(fields: [termId], references: [id])
+  package         Package         @relation(fields: [packageId], references: [id])
 
-  @@index([ClientID])
-  @@index([TermID])
-  @@index([PackageID])
+  @@index([userId])
+  @@index([termId])
+  @@index([packageId])
 }
 
 model Term {
-  TermID          Int             @id @default(autoincrement())
-  Term            String
-  RelevantRate    Float
-  Subscriptions   Subscription[]
+  id              Int             @id @default(autoincrement())
+  term            String
+  relevantRate    Float
+  subscriptions   Subscription[]
 }
 
 model Package {
-  PackageID       Int             @id @default(autoincrement())
-  Description     String
-  FlatRate        Float
-  Services        PackageService[]
-  Promotions      PackagePromotion[]
-  Subscriptions   Subscription[]
+  id              Int             @id @default(autoincrement())
+  description     String
+  flatRate        Float
+  services        PackageService[]
+  promotions      PackagePromotion[]
+  subscriptions   Subscription[]
 }
 
 model PackageService {
-  PackageServiceID Int            @id @default(autoincrement())
-  PackageID        Int
-  ServiceID        Int
-  Package          Package         @relation(fields: [PackageID], references: [PackageID])
-  Service          Service         @relation(fields: [ServiceID], references: [ServiceID])
+  id              Int             @id @default(autoincrement())
+  packageId       Int
+  serviceId       Int
+  package         Package         @relation(fields: [packageId], references: [id])
+  service         Service         @relation(fields: [serviceId], references: [id])
 
-  @@index([PackageID])
-  @@index([ServiceID])
+  @@index([packageId])
+  @@index([serviceId])
 }
 
 model PackagePromotion {
-  PackagePromotionID Int          @id @default(autoincrement())
-  Discount          Float
-  ValidFrom         DateTime
-  ValidTo           DateTime
-  PackageID         Int
-  Package           Package        @relation(fields: [PackageID], references: [PackageID])
+  id              Int             @id @default(autoincrement())
+  discount        Float
+  validFrom       DateTime
+  validTo         DateTime
+  packageId       Int
+  package         Package         @relation(fields: [packageId], references: [id])
 
-  @@index([PackageID])
+  @@index([packageId])
 }
 
 model Service {
-  ServiceID       Int             @id @default(autoincrement())
-  Name            String
-  Description     String
-  PackageServices PackageService[]
+  id              Int             @id @default(autoincrement())
+  name            String
+  description     String
+  packageServices PackageService[]
 }

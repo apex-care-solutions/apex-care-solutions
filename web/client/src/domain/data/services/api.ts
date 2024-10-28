@@ -54,12 +54,8 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
             },
             body: body ? JSON.stringify(body) : undefined,
         };
-
         const response = await fetch(url + route, options);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         return response.json() as Promise<T>;
     }

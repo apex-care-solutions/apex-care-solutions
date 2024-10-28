@@ -29,7 +29,10 @@ export const getServiceById = async (
     }
 };
 
-export const createService = async (req: Request, res: Response): Promise<void> => {
+export const createService = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     try {
         const newService = await addNewService(req.body);
         res.json(newService);
@@ -38,7 +41,10 @@ export const createService = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const updateService = async (req: Request, res: Response): Promise<void> => {
+export const updateService = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const updatedService = await modifyService(id, req.body);
@@ -51,35 +57,38 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
     }
 };
 
-export const deleteService = async (req: Request, res: Response): Promise<void> => {
+export const deleteService = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const deletedService = await removeService(id);
         if (!deletedService) {
             res.status(404).json({ error: "Service not found" });
         }
-        res.sendStatus(204).json({message: "Removed succesfully"});
+        res.sendStatus(204).json({ message: "Removed succesfully" });
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
 async function fetchAllServices(): Promise<Service[]> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function fetchServiceById(id: string): Promise<Service> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function addNewService(serviceData: any): Promise<Service> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function modifyService(id: string, serviceData: any): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function removeService(id: string): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }

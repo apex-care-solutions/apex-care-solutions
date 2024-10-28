@@ -1,4 +1,4 @@
-import { Client } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Request, Response } from "express";
 
 export const getAllUsers = async (
@@ -29,7 +29,10 @@ export const getUserById = async (
     }
 };
 
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
+export const updateUser = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const updatedUser = await modifyUser(id, req.body);
@@ -42,31 +45,34 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+export const deleteUser = async (
+    req: Request,
+    res: Response,
+): Promise<void> => {
     const { id } = req.params;
     try {
         const deletedUser = await removeUser(id);
         if (!deletedUser) {
             res.status(404).json({ error: "User not found" });
         }
-        res.sendStatus(204).json({message: "Removed succesfully"});
+        res.sendStatus(204).json({ message: "Removed succesfully" });
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
-async function fetchAllUsers(): Promise<Client[]> {
-    throw new Error("");
+async function fetchAllUsers(): Promise<User[]> {
+    throw new Error("Method not implemented.");
 }
 
-async function fetchUserById(id: string): Promise<Client> {
-    throw new Error("");
+async function fetchUserById(id: string): Promise<User> {
+    throw new Error("Method not implemented.");
 }
 
 async function modifyUser(id: string, userData: any): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }
 
 async function removeUser(id: string): Promise<boolean> {
-    throw new Error("");
+    throw new Error("Method not implemented.");
 }

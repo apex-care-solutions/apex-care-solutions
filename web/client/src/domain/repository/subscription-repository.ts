@@ -1,5 +1,4 @@
 import { ApexCareApi } from "../data/services/apex-care-api/apex-care-api";
-import { SubscriptionRoute } from "../data/services/apex-care-api/routes/subscription-routes";
 import { Subscription } from "../model/subscription";
 import { IRepository } from "./repository";
 

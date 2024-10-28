@@ -1,5 +1,4 @@
 import { ApexCareApi } from "../data/services/apex-care-api/apex-care-api";
-import { JobRoute } from "../data/services/apex-care-api/routes/job-routes";
 import { Job } from "../model/job";
 import { IRepository } from "./repository";
 

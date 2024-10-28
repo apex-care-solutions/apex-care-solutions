@@ -1,5 +1,4 @@
 import { ApexCareApi } from "../data/services/apex-care-api/apex-care-api";
-import { TechnicianRoute } from "../data/services/apex-care-api/routes/technician-routes";
 import { Technician } from "../model/technician";
 import { IRepository } from "./repository";
 

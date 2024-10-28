@@ -1,5 +1,4 @@
 import { ApexCareApi } from "../data/services/apex-care-api/apex-care-api";
-import { UserRoute } from "../data/services/apex-care-api/routes/user-routes";
 import { User } from "../model/user";
 import { IRepository } from "./repository";
 
