@@ -1,5 +1,17 @@
 {
   "devDependencies": {
     "@types/node": "^22.7.7"
+  },
+  "dependencies": {
+    "@auth/core": "^0.37.2",
+    "@lucia-auth/adapter-mongodb": "^1.0.3",
+    "@lucia-auth/adapter-prisma": "^4.0.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "lucia": "^3.2.2",
+    "lucia-auth": "^1.8.0",
+    "prisma": "^5.21.1",
+    "supabase": "^1.207.9"
   }
 }

@@ -1,8 +1,10 @@
 import { Button } from "@/presenter/components/ui/button";
 import "/src/globals.css";
 import { ArrowRight } from "lucide-react";
+import { useSession } from "../../auth/context/auth-provider";
 
 export function Home() {
+    const [user] = useSession();
     return (
         <div className="flex flex-col gap-20">
             <div className="flex flex-row max-md:flex-col gap-20">
