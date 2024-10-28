@@ -1,5 +1,5 @@
 import { AuthContainer } from "../components/auth-container";
-import { Button } from "@/presenter/components/ui/button";
+import { Button } from "@/components/ui/button";
 import "/src/globals.css";
 
 export function Register() {

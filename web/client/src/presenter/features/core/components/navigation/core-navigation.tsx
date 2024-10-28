@@ -1,13 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "@/presenter/features/core";
-import { LandingNav } from "@/presenter/components/layout/nav";
+import { LandingNav, Nav } from "@/components/layout/nav";
+import { useSession } from "@/presenter/features/auth/context/auth-provider";
+import { Landing } from "../../views/landing";
 
 export function CoreNavigation() {
+    const [user] = useSession();
     return (
         <div className="w-full flex flex-col gap-20">
-            <LandingNav />
+            {user ? <Nav /> : <LandingNav />}
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={user ? <Home /> : <Landing />} />
             </Routes>
         </div>
     );
