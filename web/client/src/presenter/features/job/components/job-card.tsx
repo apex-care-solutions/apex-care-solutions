@@ -1,30 +1,33 @@
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-} from "@/components/ui/card";
-import { ArrowRight, CheckCheck } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 import { JobStatusTrack } from "./job-status-track";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageBubble } from "../../message/components/message-bubble";
+import { TechnicianHoverCard } from "../../technician/components/technician-hover-card";
+
+let technician: {
+    id: number;
+    username: string;
+    createdAt: Date;
+    title: string;
+    description: string;
+    averageRating: number;
+} = {
+    id: 1,
+    username: "werries",
+    title: "IT Technician",
+    createdAt: new Date(),
+    averageRating: 2.1,
+    description: "IT Technician @ Entelect",
+};
 
 export function JobCard() {
     return (
         <Card className="flex flex-col p-5 gap-10">
             <div className="w-full transition duration-200 flex justify-between items-center">
                 <div className="flex items-center gap-5">
-                    <div className="flex flex-col justify-center items-center gap-1">
-                        <Avatar className="h-10 w-10 rounded-full">
-                            <AvatarImage src={""} alt={""} />
-                            <AvatarFallback className="h-10 w-10">
-                                W
-                            </AvatarFallback>
-                        </Avatar>
-                    </div>
+                    <TechnicianHoverCard technician={technician} />
                     <p className="text-xl font-bold">Server Maintainance</p>
                 </div>
                 <Link to="/job-page">
