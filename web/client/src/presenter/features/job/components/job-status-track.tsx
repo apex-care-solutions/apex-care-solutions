@@ -1,4 +1,4 @@
-import { cn } from "@/presenter/lib/utils";
+import { cn } from "@/lib/utils";
 
 const jobStatuses = [
     {
@@ -72,6 +72,8 @@ export function JobStatusTrack() {
                                         status.id != highestjobStatus &&
                                         "bg-accent",
                                     !statusUpdate && "border-border",
+                                    status.id == highestjobStatus &&
+                                        "transition-all animate-pulse-accent",
                                 )}
                             ></div>
                             <p>{status.status}</p>
