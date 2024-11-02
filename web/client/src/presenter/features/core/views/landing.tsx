@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 
 export function Landing() {
     return (
-        <div className="flex flex-col gap-20">
+        <Card className="flex flex-col gap-20">
             <div className="flex flex-row max-md:flex-col gap-20">
                 <div className="flex-1 flex flex-col justify-center gap-5">
                     <p className="text-6xl font-bold">
@@ -36,6 +37,6 @@ export function Landing() {
                     />
                 </div>
             </div>
-        </div>
+        </Card>
     );
 }

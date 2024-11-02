@@ -42,3 +42,8 @@ export const S_WA_JOB_NOTIFY = requireEnv<string>(
     "S_WA_JOB_NOTIFY",
     "S_WA_JOB_NOTIFY",
 );
+
+export const HASH_ROUNDS = requireEnv<number>(
+    "HASH_ROUNDS",
+    10,
+);

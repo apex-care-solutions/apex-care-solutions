@@ -6,21 +6,12 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
+import { JobPreview } from "../../job/components/job-preview";
 
 export function Home() {
     return (
         <div>
-            <div className="bg-muted">
-                <div className="flex items-center justify-between m-5 p-10">
-                    <div className="bg-black text-white p-5">#22</div>
-                    <div className="flex justify-center bg-amber-500 text-white p-2 w-4/5 rounded">
-                        In progress
-                    </div>
-                    <div>
-                        <img src="/expand.svg" alt="expand" />
-                    </div>
-                </div>
-            </div>
+            <JobPreview />
             <div className="bg-black flex items-center justify-center p-10">
                 <img src="/promoNew.svg" alt="promo" />
             </div>
