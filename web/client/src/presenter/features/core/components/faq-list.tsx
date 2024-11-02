@@ -8,8 +8,9 @@ import {
 export function FAQList() {
     return (
         <div>
-            <p className="text-4xl font-bold max-w-96">
-                Frequently Asked <b>Questions</b>
+            <p className="text-5xl font-bold">
+                Frequently Asked <br />
+                Questions
                 <span className="text-accent">.</span>
             </p>
             <Accordion type="single" collapsible>
