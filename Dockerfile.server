@@ -2,14 +2,14 @@
 FROM node:18
 
 # Set working directory
-WORKDIR /app/client
+WORKDIR /app
 
 # Install dependencies
 COPY web/server/package*.json ./
 
-RUN npm install
-
 COPY web/server ./
+
+RUN npm install
 
 # Expose the port the server will run on
 EXPOSE 3333

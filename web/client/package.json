@@ -43,5 +43,8 @@
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "4.9.5"
+    },
+    "resolutions": {
+        "rollup": "npm:@rollup/wasm-node"
     }
 }
