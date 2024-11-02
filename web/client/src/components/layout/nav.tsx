@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useSession } from "@/presenter/features/auth/context/auth-provider";
+import { AccountDropdown } from "@/presenter/features/auth/components/account-dropdown";
 
 export function LandingNav() {
     return (
@@ -65,15 +66,7 @@ export function Nav() {
                     </Link>
                 </div>
                 <div className="flex gap-5">
-                    <Link to="/user">
-                        <Button
-                            variant="ghost"
-                            className="font-bold rounded-full border-border border-[1px]"
-                        >
-                            <img src="/user.svg" alt="user" />
-                            {user?.username}
-                        </Button>
-                    </Link>
+                    <AccountDropdown />
                 </div>
             </div>
         </nav>

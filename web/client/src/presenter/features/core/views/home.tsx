@@ -10,7 +10,7 @@ import { JobPreview } from "../../job/components/job-preview";
 
 export function Home() {
     return (
-        <div>
+        <div className="flex flex-col gap-10">
             <JobPreview />
             <div className="bg-black flex items-center justify-center p-10">
                 <img src="/promoNew.svg" alt="promo" />
