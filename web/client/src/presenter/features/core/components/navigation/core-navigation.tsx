@@ -4,6 +4,7 @@ import { LandingNav, Nav } from "@/components/layout/nav";
 import { useSession } from "@/presenter/features/auth/context/auth-provider";
 import { Landing } from "../../views/landing";
 import { Footer } from "@/components/layout/footer";
+import { JobHistoryView } from "@/presenter/features/job/views/job-history";
 
 export function CoreNavigation() {
     const [user] = useSession();
@@ -12,6 +13,7 @@ export function CoreNavigation() {
             {user ? <Nav /> : <LandingNav />}
             <Routes>
                 <Route path="/" element={user ? <Home /> : <Landing />} />
+                <Route path="/history" element={<JobHistoryView />} />
             </Routes>
             <Footer />
         </div>
