@@ -49,7 +49,7 @@ export function TechnicianHoverCard({
                                 ⭐ {technician.averageRating}
                             </p>
                         </div>
-                        <p className="text-sm">{technician.title}</p>
+                        <p className="text-sm font-bold">{technician.title}</p>
                         <p className="text-sm">{technician.description}</p>
                         <div className="flex items-center pt-2">
                             <Calendar className="mr-2 h-4 w-4 opacity-70" />
