@@ -1,4 +1,5 @@
-# Use official Node.js image for server
+# Dockerfile.server
+
 FROM node:18
 
 # Set working directory
@@ -6,13 +7,13 @@ WORKDIR /app
 
 # Install dependencies
 COPY web/server/package*.json ./
-
-COPY web/server ./
-
 RUN npm install
 
-# Expose the port the server will run on
+# Copy the rest of the server code
+COPY web/server ./
+
+# Expose port
 EXPOSE 3333
 
-# Command to run Prisma migrations and start the server using nodemon
-CMD ["npm", "run", "dev"]
+# Start the server with nodemon for live-reloading
+CMD ["npx", "nodemon", "src/index.ts"]

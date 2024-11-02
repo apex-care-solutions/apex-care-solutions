@@ -42,18 +42,33 @@ export const createJob = async (req: Request, res: Response): Promise<void> => {
             auth: AuthorizedUserRequest;
         };
 
-        const { technician, job }: { technician: Technician; job: Job } =
-            req.body;
+        const { job }: {job: Job} = req.body;
+
+        const user = await prisma.user.findFirst({
+            where: {
+                staff: {
+                    technician: {
+                        id: job.technicianId
+                    }
+                }
+            }
+        })
+
+        if(!user){ 
+            res.status(400).json({ error: "Bad Request" })
+        return;
+    };
+
 
         const newJob = await addNewJob(job);
 
         const notifier = notifierFactory(
-            technician.preferredContact,
-            technician,
+            user?.preferredContactMethod,
+            user,
         );
 
         await notifier.send(
-            `New Job Request from User ID ${auth.user.id}. Please review and accept the job: http://${HOST}:${PORT}/technician/${technician.id}/jobs.`,
+            `New Job Request from User ID ${auth.user.id}. Please review and accept the job: http://${HOST}:${PORT}/technician/${job.technicianId}/jobs.`,
         );
 
         res.status(201).json(newJob);
@@ -71,39 +86,28 @@ export const jobStatusUpdate = async (
             auth: AuthorizedTechnicianRequest;
         };
         const { jobId } = req.params;
-        const { accept } = req.query;
+        const { jobStatusId } = req.query;
 
-        const updatedStatus: { [key: string]: string | undefined } = {
-            true: "ACCEPTED",
-            false: "DECLINED",
-        };
-        let queryStatus = updatedStatus[accept as string];
-        if (!queryStatus) {
-            res.status(400).json({ error: "Bad Request" });
-            return;
-        }
-
-        const jobStatus = await prisma.jobStatus.create({
+        const jobStatusUpdate = await prisma.jobStatusUpdate.create({
             data: {
                 jobId: Number(jobId),
-                status: queryStatus,
-                message: `Technician #${auth.technician.id} ${queryStatus} the job.`,
+                jobStatusId: Number(jobStatusId),
             },
         });
-
+        
         const user = await prisma.user.findFirst({
             where: {
-                requests: { some: { jobs: { some: { id: Number(jobId) } } } },
+                jobRequests: { some: { jobs: { some: { id: Number(jobId) } } } },
             },
         });
 
         if (!!user) {
-            const notifier = notifierFactory(user.preferredContact, user);
+            const notifier = notifierFactory(user.preferredContactMethod, user);
             await notifier.send(
-                `Technician #${auth.technician.id} ${queryStatus} the job and is on their way.`,
+                `Technician #${auth.technician.id} ${jobStatusId} the job and is on their way.`,
             );
         }
-        res.status(201).json(jobStatus);
+        res.status(201).json(jobStatusUpdate);
     } catch (error) {
         res.status(400).json({ error: "Bad Request" });
     }

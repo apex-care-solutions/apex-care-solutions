@@ -1,15 +1,19 @@
 # Dockerfile.client
+
 FROM node:18
 
+# Set working directory
 WORKDIR /app
 
 # Install dependencies
 COPY web/client/package*.json ./
-
-COPY web/client ./
-
 RUN npm install
 
+# Copy the rest of the client code
+COPY web/client ./
+
+# Expose client port
 EXPOSE 3003
 
+# Start the client with vite for hot-reloading
 CMD ["npm", "run", "dev"]

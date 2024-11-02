@@ -7,7 +7,7 @@ import { AuthProvider } from "./presenter/features/auth/context/auth-provider";
 export function App() {
     return (
         <main className="flex w-full items-center flex-col">
-            <div className="w-full h-full flex items-center flex-col max-w-[1440px]">
+            <div className="w-full h-full flex items-center flex-col max-w-[1440px] py-10">
                 <AuthProvider>
                     <Router>
                         <Routes>
