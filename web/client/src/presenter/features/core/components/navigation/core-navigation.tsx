@@ -8,7 +8,7 @@ import { Footer } from "@/components/layout/footer";
 export function CoreNavigation() {
     const [user] = useSession();
     return (
-        <div className="w-full flex flex-col gap-20">
+        <div className="w-full flex flex-col gap-10">
             {user ? <Nav /> : <LandingNav />}
             <Routes>
                 <Route path="/" element={user ? <Home /> : <Landing />} />
