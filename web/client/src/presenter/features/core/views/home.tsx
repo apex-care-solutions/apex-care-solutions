@@ -11,9 +11,9 @@ export function Home() {
     return (
         <div>
             <div className="bg-muted">
-                <div className="flex items-center justify-between m-5">
-                    <div className="bg-black text-white p-4">#22</div>
-                    <div className="flex justify-center bg-amber-500 text-white p-2 w-3/5 rounded">
+                <div className="flex items-center justify-between m-5 p-10">
+                    <div className="bg-black text-white p-5">#22</div>
+                    <div className="flex justify-center bg-amber-500 text-white p-2 w-4/5 rounded">
                         In progress
                     </div>
                     <div>
@@ -61,10 +61,10 @@ export function Home() {
                         className="w-full max-w-sm"
                     >
                         <CarouselContent>
-                            {Array.from({ length: 5 }).map((_, index) => (
+                            {Array.from({ length: 10 }).map((_, index) => (
                                 <CarouselItem
                                     key={index}
-                                    className="md:basis-1/2 lg:basis-1/3"
+                                    className="md:basis-1/3 lg:basis-1/5"
                                 >
                                     <div className="p-1">
                                         <Card>
@@ -81,6 +81,34 @@ export function Home() {
                         <CarouselPrevious />
                         <CarouselNext />
                     </Carousel>
+                </div>
+                <div className="flex flex-col gap-5">
+                    <p className="text-3xl font-bold max-w-96">
+                        Frequently Asked questions
+                        <span className="text-amber-500">.</span>
+                    </p>
+                    <div className="flex justify-between items-center border-b border-black p-2 font-bold">
+                        <p>What services does ApexCare Solutions provide?</p>
+                        <div>+</div>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-black p-2 font-bold">
+                        <p>How do request a service from ApexCare Solutions?</p>
+                        <div>+</div>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-black p-2 font-bold">
+                        <p>Can I track the progress of my service request?</p>
+                        <div>+</div>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-black p-2 font-bold">
+                        <p>
+                            How do I provide feedback on the service provided?
+                        </p>
+                        <div>+</div>
+                    </div>
+                    <div className="flex justify-between items-center border-b border-black p-2 font-bold">
+                        <p>Can I setup a recurring subscription?</p>
+                        <div>+</div>
+                    </div>
                 </div>
             </div>
         </div>
