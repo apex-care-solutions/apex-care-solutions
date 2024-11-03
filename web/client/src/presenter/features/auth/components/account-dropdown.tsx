@@ -11,10 +11,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from "lucide-react";
 import { useSession } from "../context/auth-provider";
+import { UserRepository } from "@/domain/repository";
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
+import { useNavigate } from "react-router-dom";
 
 export function AccountDropdown() {
+    const userRepository = new UserRepository(apexCareApi);
+    const navigate = useNavigate();
     const [user] = useSession();
     if (!user) return;
+
+    async function handleSignOut() {
+        let res = await userRepository.signOut();
+        if (res.redirect) navigate(res.redirect);
+    }
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -36,7 +46,7 @@ export function AccountDropdown() {
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                         <Avatar className="h-8 w-8 rounded-lg">
                             <AvatarImage
-                                src={user.avatar}
+                                src={user.avatar || ""}
                                 alt={user.username}
                             />
                             <AvatarFallback className="rounded-lg">
@@ -76,7 +86,7 @@ export function AccountDropdown() {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut />
                     Log out
                 </DropdownMenuItem>

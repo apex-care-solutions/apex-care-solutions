@@ -1,3 +1,5 @@
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
+import { UserRepository } from "@/domain/repository";
 import {
     createContext,
     ReactNode,
@@ -5,13 +7,20 @@ import {
     useEffect,
     useState,
 } from "react";
+import { Loading } from "../../core/views/loading";
 
 export type UserAuth = {
-    id: string;
+    id: number;
     username: string;
-    avatar: string;
-    roles: string[];
-    address: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    avatar: string | null;
+    address: string | null;
+    preferredContactMethod: "NONE" | "EMAIL" | "PHONE" | "SMS";
+    userType: "ADMIN" | "TECHNICIAN" | "HELPDESK_MANAGER" | "CUSTOMER";
+    createdAt: Date;
 };
 
 const AuthContext = createContext<
@@ -22,20 +31,24 @@ const AuthContext = createContext<
 >([undefined, () => {}]);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [userAuth, setUserAuth] = useState<UserAuth | undefined>({
-        id: "1",
-        avatar: "",
-        roles: [],
-        username: "Werner",
-        address:
-            "124 Kingdoepking Street, Riley Avenue, Pietermaritzburg, 3201",
-    });
+    const userRepository = new UserRepository(apexCareApi);
+    const [userAuth, setUserAuth] = useState<UserAuth | undefined>(undefined);
+    const [authLoaded, setAuthLoaded] = useState<boolean>(false);
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        userRepository
+            .me()
+            .then((res) => {
+                setUserAuth(res.data);
+            })
+            .finally(() => {
+                setAuthLoaded(true);
+            });
+    }, []);
 
     return (
         <AuthContext.Provider value={[userAuth, setUserAuth]}>
-            {children}
+            {authLoaded ? children : <Loading />}
         </AuthContext.Provider>
     );
 }

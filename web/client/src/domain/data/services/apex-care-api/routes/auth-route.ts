@@ -30,9 +30,20 @@ export const authRoutes = {
                 "Content-Type": "application/json",
             }
         }),
+    "POST /auth/signout": (url: string, body: LoginData) =>
+        API.route<boolean>({
+            url,
+            method: "POST",
+            route: `/auth/signout`,
+            body,
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }),
 } as const;
 
 export interface RegisterData {
+    username: string;
     firstName: string;
     lastName: string;
     email: string;
