@@ -22,12 +22,11 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LoginData } from "@/domain/data/services/apex-care-api/routes/auth-route";
+import { UserRepository } from "@/domain/repository";
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
 
 // Define form data type
-interface LoginFormData {
-    username: string;
-    password: string;
-}
 
 // Define form validation schema
 const loginSchema = z.object({
@@ -41,7 +40,7 @@ const loginSchema = z.object({
 
 export function Login() {
     // Set up form with validation
-    const form = useForm<LoginFormData>({
+    const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             username: "",
@@ -49,9 +48,11 @@ export function Login() {
         },
     });
 
-    const onSubmit = (data: LoginFormData) => {
-        // Handle form submission
+    const userRepository = new UserRepository(apexCareApi);
+
+    const onSubmit = (data: LoginData) => {
         console.log(data);
+        userRepository.signIn(data);
     };
 
     return (

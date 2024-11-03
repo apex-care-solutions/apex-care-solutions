@@ -34,20 +34,20 @@ services:
         env_file:
             - ./web/server/.env
 
-    client:
-        build:
-            context: .
-            dockerfile: Dockerfile.client
-        depends_on:
-            - server
-        ports:
-            - "3003:3003"
-        environment:
-            NODE_ENV: development
-        restart: always
-        volumes:
-            - ./web/client:/app
-            - /app/node_modules
+    # client:
+    #     build:
+    #         context: .
+    #         dockerfile: Dockerfile.client
+    #     depends_on:
+    #         - server
+    #     ports:
+    #         - "3003:3003"
+    #     environment:
+    #         NODE_ENV: development
+    #     restart: always
+    #     volumes:
+    #         - ./web/client:/app
+    #         - /app/node_modules
 
 volumes:
     postgres_data:

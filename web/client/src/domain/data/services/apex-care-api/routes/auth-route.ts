@@ -10,18 +10,40 @@ export const authRoutes = {
             method: "GET",
             route: `/auth/me`,
         }),
-    "POST /auth/register": (url: string) =>
+    "POST /auth/register": (url: string, body: RegisterData) =>
         API.route<boolean>({
             url,
             method: "POST",
             route: `/auth/register`,
+            body,
+            headers: {
+                "Content-Type": "application/json",
+            }
         }),
-    "POST /auth/signin": (url: string) =>
+    "POST /auth/signin": (url: string, body: LoginData) =>
         API.route<UserAuth>({
             url,
             method: "POST",
             route: `/auth/signin`,
+            body,
+            headers: {
+                "Content-Type": "application/json",
+            }
         }),
 } as const;
+
+export interface RegisterData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export interface LoginData {
+    username: string;
+    password: string;
+}
 
 export type AuthRoute = keyof typeof authRoutes;

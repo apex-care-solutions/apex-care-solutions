@@ -17,3 +17,5 @@ export class ApexCareApi extends API<typeof apexCareRoutes> {
         super(baseUrl, headers);
     }
 }
+
+export const apexCareApi = new ApexCareApi("http://localhost:3333", {})

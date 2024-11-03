@@ -13,18 +13,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
+import { RegisterData } from "@/domain/data/services/apex-care-api/routes/auth-route";
+import { UserRepository } from "@/domain/repository";
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
 
-// Define form data type
-interface RegisterFormData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    password: string;
-    confirmPassword: string;
-}
-
-// Define Zod schema for form validation
 const registerSchema = z
     .object({
         firstName: z.string().min(1, "First name is required"),
@@ -46,13 +38,14 @@ export function Register() {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<RegisterFormData>({
+    } = useForm<RegisterData>({
         resolver: zodResolver(registerSchema),
     });
 
-    const onSubmit = (data: RegisterFormData) => {
-        console.log(data);
-        // Handle registration logic here
+    const userRepository = new UserRepository(apexCareApi);
+
+    const onSubmit = (data: RegisterData) => {
+        userRepository.register(data);
     };
 
     return (
