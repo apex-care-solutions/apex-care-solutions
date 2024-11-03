@@ -1,13 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import { Login, Register } from "@/presenter/features/auth";
+import { AuthContainer, Login, Register } from "@/presenter/features/auth";
 
 export function AuthNavigation() {
     return (
         <main>
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-            </Routes>
+            <AuthContainer>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                </Routes>
+            </AuthContainer>
         </main>
     );
 }

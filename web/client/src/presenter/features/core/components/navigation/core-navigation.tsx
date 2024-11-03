@@ -10,11 +10,11 @@ import { JobHistoryView } from "@/presenter/features/job/views/job-history";
 export function CoreNavigation() {
     const [user] = useSession();
     return (
-        <div className="w-full flex flex-col gap-10">
+        <div className="w-full flex flex-col gap-10 py-10">
             {user ? <Nav /> : <LandingNav />}
             <Routes>
                 <Route path="/" element={user ? <Home /> : <Landing />} />
-                <Route path="/account" element= {<Account/>}/>
+                <Route path="/account" element={<Account />} />
                 <Route path="/history" element={<JobHistoryView />} />
             </Routes>
             <Footer />
