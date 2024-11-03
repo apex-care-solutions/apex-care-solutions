@@ -19,6 +19,8 @@ export const PORT = requireEnv<number>("PORT", 3333);
 export const HOST = requireEnv<string>("HOST", "0.0.0.0");
 export const URL = requireEnv<string>("URL", "http://localhost");
 
+export const SALT_ROUNDS = requireEnv<number>("SALT_ROUNDS", 10);
+
 /*** DATABASE ***/
 export const DATABASE_URL = requireEnv<string>(
     "DATABASE_URL",

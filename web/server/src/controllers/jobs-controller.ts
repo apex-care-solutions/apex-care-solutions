@@ -1,4 +1,4 @@
-import { Job, Technician } from "@prisma/client";
+import { Job } from "@prisma/client";
 import { Request, Response } from "express";
 import { notifierFactory } from "../lib/notify/notifier-factory";
 import {

@@ -3,12 +3,12 @@ import {
     loginUser,
     registerUser,
     logoutUser,
+    getUser
 } from "../controllers/auth-controller";
 
 export const authRouter = Router();
 
-authRouter.post("/auth", loginUser);
-
-authRouter.post("/auth", registerUser);
-
-authRouter.post("/auth", logoutUser);
+authRouter.post("/signin", loginUser);
+authRouter.post("/register", registerUser);
+authRouter.post("/signout", logoutUser);
+authRouter.get("/me", getUser);
