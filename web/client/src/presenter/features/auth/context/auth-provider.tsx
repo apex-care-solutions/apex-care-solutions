@@ -7,6 +7,7 @@ import {
 } from "react";
 
 export type UserAuth = {
+    id: string;
     username: string;
     avatar: string;
     roles: string[];
@@ -22,6 +23,7 @@ const AuthContext = createContext<
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [userAuth, setUserAuth] = useState<UserAuth | undefined>({
+        id: "1",
         avatar: "",
         roles: [],
         username: "Werner",

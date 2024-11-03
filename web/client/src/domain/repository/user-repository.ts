@@ -18,6 +18,7 @@ export class UserRepository implements IRepository<User> {
         throw new Error("Method not implemented.");
     }
     update(id: string, entity: Partial<User>): Promise<User | null> {
+        this.apexCareApi.request("PUT /users/:id")
         throw new Error("Method not implemented.");
     }
     delete(id: string): Promise<boolean> {

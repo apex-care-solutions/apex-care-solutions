@@ -6,8 +6,21 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { UserRepository } from "@/domain/repository";
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
+import { useState } from "react";
+import { useSession } from "../context/auth-provider";
 
 export const ProfileCard = () => {
+    const userRepository = new UserRepository(apexCareApi); 
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [user] = useSession();
+
+    if(!user) {
+        return 
+    }  
+
     return (
         <Card className="bg-neutral-100 border-none rounded-none">
             <CardHeader>
@@ -30,11 +43,19 @@ export const ProfileCard = () => {
                                 <input
                                     type="text"
                                     className="bg-white w-full p-1"
+                                    id="firstName"
+                                    onChange={(e)=> {
+                                        setFirstName(e.target.value)
+                                    }}
                                 />
                                 <p>Last name</p>
                                 <input
                                     type="text"
                                     className="bg-white w-full p-1"
+                                    id="lastName"
+                                    onChange={(e)=> {
+                                        setLastName(e.target.value)
+                                    }}
                                 />
                             </div>
                         </form>
@@ -45,6 +66,9 @@ export const ProfileCard = () => {
                 <Button
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
+                    onSubmit={() => {
+                        userRepository.update(user.id,{firstName, lastName})
+                    }}
                 >
                     Confirm
                 </Button>
