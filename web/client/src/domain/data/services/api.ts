@@ -1,4 +1,6 @@
 import { ApiRoute } from "./api-route";
+import axios, { AxiosRequestConfig } from 'axios';
+
 
 export interface RequestHeaders {
     Authorization?: string;
@@ -20,6 +22,15 @@ export interface ResponseHeaders {
     "X-RateLimit-Limit"?: string;
     "X-RateLimit-Remaining"?: string;
     "X-RateLimit-Reset"?: string;
+}
+
+export type APIResponse<T> = {
+    success: boolean,
+    statusCode: number,
+    message?: string,
+    data?: T,
+    error?: string,
+    redirect?: string
 }
 
 export abstract class API<Routes extends Record<string, ApiRoute>> {
@@ -45,20 +56,28 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
         route: string;
         query?: any;
         body?: any;
-        headers?: RequestHeaders;
-    }): Promise<T> {
-        const options: RequestInit = {
+        headers?: Record<string, string>;
+    }): Promise<APIResponse<T>> {
+        const config: AxiosRequestConfig = {
             method,
+            url: `${url}${route}`,
             headers: {
                 ...headers,
             },
-            body: body ? JSON.stringify(body) : undefined,
+            data: body,
+            params: query,
+            withCredentials: true,  
         };
-        console.log(options)
-        const response = await fetch(url + route, options);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        return response.json() as Promise<T>;
+    
+        try {
+            const response = await axios.request<APIResponse<T>>(config);
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                throw new Error(`HTTP error! status: ${error.response.status}`);
+            }
+            throw new Error('Network error or invalid request');
+        }
     }
 
     async request<Key extends keyof Routes>(
@@ -74,6 +93,7 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
             params,
             query,
             body,
+            headers
         )) as ReturnType<Routes[Key]>;
     }
 }

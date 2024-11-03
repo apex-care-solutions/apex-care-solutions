@@ -1,16 +1,15 @@
-# Dockerfile.server
-
 FROM node:18
 
 # Set working directory
 WORKDIR /app
 
 # Install dependencies
-COPY web/server/package*.json ./
+COPY /web/server/package*.json ./
+
 RUN npm install
 
 # Copy the rest of the server code
-COPY web/server ./
+COPY /web/server ./
 
 # Expose port
 EXPOSE 3333

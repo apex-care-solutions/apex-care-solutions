@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "/src/globals.css";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -19,6 +19,7 @@ import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api"
 
 const registerSchema = z
     .object({
+        username: z.string().min(1, "Username is required"),
         firstName: z.string().min(1, "First name is required"),
         lastName: z.string().min(1, "Last name is required"),
         email: z.string().email("Invalid email address"),
@@ -42,12 +43,18 @@ export function Register() {
         resolver: zodResolver(registerSchema),
     });
 
+    const navigate = useNavigate();
+
     const userRepository = new UserRepository(apexCareApi);
 
-    const onSubmit = (data: RegisterData) => {
-        userRepository.register(data);
+    const onSubmit = async (data: RegisterData) => {
+        try {
+            let res = await userRepository.register(data);
+            if (res.redirect) navigate(res.redirect);
+        } catch (error) {
+            console.error("Registration failed:", error);
+        }
     };
-
     return (
         <div className="h-full w-full grid grid-rows-3">
             <div className="w-full flex justify-end p-5">
@@ -72,6 +79,24 @@ export function Register() {
                             onSubmit={handleSubmit(onSubmit)}
                         >
                             <div className="grid grid-cols-2 gap-4">
+                                <div className="col-span-2">
+                                    <Input
+                                        type="text"
+                                        placeholder="Enter username"
+                                        className={`bg-white-muted border p-2 ${
+                                            errors.username
+                                                ? "border-red-500"
+                                                : ""
+                                        }`}
+                                        {...register("username")}
+                                    />
+                                    {errors.username && (
+                                        <span className="text-red-500 text-sm">
+                                            {String(errors.username.message)}
+                                        </span>
+                                    )}
+                                </div>
+
                                 <div>
                                     <Input
                                         type="text"
