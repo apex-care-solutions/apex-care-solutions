@@ -18,11 +18,12 @@ import { useNavigate } from "react-router-dom";
 export function AccountDropdown() {
     const userRepository = new UserRepository(apexCareApi);
     const navigate = useNavigate();
-    const [user] = useSession();
+    const [user, setUser] = useSession();
     if (!user) return;
 
     async function handleSignOut() {
         let res = await userRepository.signOut();
+        setUser(undefined);
         if (res.redirect) navigate(res.redirect);
     }
     return (
