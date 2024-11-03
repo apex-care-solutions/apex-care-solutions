@@ -3,6 +3,7 @@ export type ApiRoute = (
     params?: any,
     query?: any,
     body?: any,
+    headers?: any
 ) => Promise<any>;
 
 export type ApiBaseRouteCollection<T extends string> = {

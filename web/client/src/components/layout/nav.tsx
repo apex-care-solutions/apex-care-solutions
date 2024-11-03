@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { useSession } from "@/presenter/features/auth/context/auth-provider";
 import { AccountDropdown } from "@/presenter/features/auth/components/account-dropdown";
 import { Badge } from "../ui/badge";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin, Pin, PinIcon } from "lucide-react";
 
 export function LandingNav() {
     return (
@@ -50,11 +50,14 @@ export function Nav() {
                     />
                 </Link>
                 <div className="flex gap-10 flex-1">
-                    <Badge className="bg-black text-white rounded-full px-5 p-2.5 text-ellipsis whitespace-nowrap overfl">
-                        <div className="max-w-40 overflow-hidden text-ellipsis whitespace-nowrap">
-                            {user?.address}
-                        </div>
-                    </Badge>
+                    <Link to="/account">
+                        <Badge className="bg-black text-white rounded-full px-5 p-2.5 text-ellipsis whitespace-nowrap flex gap-1">
+                            <MapPin className="h-5" />
+                            <div className="max-w-40 overflow-hidden text-ellipsis whitespace-nowrap flex gap-1 items-center">
+                                {user?.address || "Add Location"}
+                            </div>
+                        </Badge>
+                    </Link>
                     <div className="flex items-stretch gap-2.5 flex-1">
                         <input
                             type="text"

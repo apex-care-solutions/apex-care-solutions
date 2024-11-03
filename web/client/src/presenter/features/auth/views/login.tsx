@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { LoginData } from "@/domain/data/services/apex-care-api/routes/auth-route";
 import { UserRepository } from "@/domain/repository";
 import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
+import { useSession } from "../context/auth-provider";
 
 // Define form data type
 
@@ -39,6 +40,8 @@ const loginSchema = z.object({
 });
 
 export function Login() {
+    const [_, setUser] = useSession();
+    const navigate = useNavigate();
     // Set up form with validation
     const form = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
@@ -50,9 +53,10 @@ export function Login() {
 
     const userRepository = new UserRepository(apexCareApi);
 
-    const onSubmit = (data: LoginData) => {
-        console.log(data);
-        userRepository.signIn(data);
+    const onSubmit = async (data: LoginData) => {
+        let res = await userRepository.signIn(data);
+        if (res.data && res.success) setUser(res.data);
+        if (res.redirect) navigate(res.redirect);
     };
 
     return (

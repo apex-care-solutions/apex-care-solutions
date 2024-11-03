@@ -1,10 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import { ApexCareApi } from "../data/services/apex-care-api/apex-care-api";
-import { UserRoute } from "../data/services/apex-care-api/routes/user-routes";
 import { User } from "../model/user";
 import { IRepository } from "./repository";
-import { useSession } from "@/presenter/features/auth/context/auth-provider";
+import { UserAuth } from "@/presenter/features/auth/context/auth-provider";
 import { LoginData, RegisterData } from "../data/services/apex-care-api/routes/auth-route";
+import { APIResponse } from "../data/services/api";
 
 export class UserRepository implements IRepository<User> {
     constructor(private apexCareApi: ApexCareApi) {}
@@ -12,34 +11,36 @@ export class UserRepository implements IRepository<User> {
         throw new Error("Method not implemented.");
     }
     findById(id: string): Promise<User | null> {
+        id;
         throw new Error("Method not implemented.");
     }
     create(entity: User): Promise<User> {
+        entity;
         throw new Error("Method not implemented.");
     }
     update(id: string, entity: Partial<User>): Promise<User | null> {
-        this.apexCareApi.request("PUT /users/:id")
+        id;
+        entity;
         throw new Error("Method not implemented.");
     }
     delete(id: string): Promise<boolean> {
+        id;
         throw new Error("Method not implemented.");
     }
-    // me(): Promise<void>{
 
-    // }
-    async register(userRegistration: RegisterData) : Promise<void>{
-        let signIn = await this.apexCareApi.request("POST /auth/register",userRegistration)
-        const navigate = useNavigate();
-        if(signIn) navigate("/auth/login");    
+    async register(userRegistration: RegisterData) : Promise<APIResponse<boolean>>{
+        return await this.apexCareApi.request("POST /auth/register",userRegistration)
     }
 
-    async signIn(userLogin: LoginData) : Promise<void>{
-        let signIn = await this.apexCareApi.request("POST /auth/signin",userLogin)
-        const navigate = useNavigate();
-        if(signIn) navigate("/");
+    async signIn(userLogin: LoginData) : Promise<APIResponse<UserAuth>>{
+        return await this.apexCareApi.request("POST /auth/signin",userLogin)
     }
 
-    async signOut() : Promise<boolean>{
-        throw new Error("Method not implemented.");
+    async signOut() : Promise<APIResponse<boolean>>{
+        return await this.apexCareApi.request("POST /auth/signout")
+    }
+
+    async me() : Promise<APIResponse<UserAuth>>{
+        return await this.apexCareApi.request("GET /auth/me")
     }
 }

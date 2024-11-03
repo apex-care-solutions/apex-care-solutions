@@ -11,10 +11,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from "lucide-react";
 import { useSession } from "../context/auth-provider";
+import { UserRepository } from "@/domain/repository";
+import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
+import { Link, useNavigate } from "react-router-dom";
 
 export function AccountDropdown() {
-    const [user] = useSession();
+    const userRepository = new UserRepository(apexCareApi);
+    const navigate = useNavigate();
+    const [user, setUser] = useSession();
     if (!user) return;
+
+    async function handleSignOut() {
+        let res = await userRepository.signOut();
+        setUser(undefined);
+        if (res.redirect) navigate(res.redirect);
+    }
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -36,7 +47,7 @@ export function AccountDropdown() {
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                         <Avatar className="h-8 w-8 rounded-lg">
                             <AvatarImage
-                                src={user.avatar}
+                                src={user.avatar || ""}
                                 alt={user.username}
                             />
                             <AvatarFallback className="rounded-lg">
@@ -55,28 +66,39 @@ export function AccountDropdown() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <Sparkles />
-                        Subscription
-                    </DropdownMenuItem>
+                    <Link to="/account/subscription">
+                        <DropdownMenuItem>
+                            <Sparkles />
+                            Subscription
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <BadgeCheck />
-                        Account
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <CreditCard />
-                        Billing
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Bell />
-                        Notifications
-                    </DropdownMenuItem>
+                    <Link to="/account">
+                        <DropdownMenuItem>
+                            <BadgeCheck />
+                            Account
+                        </DropdownMenuItem>
+                    </Link>
+                    <Link to="/account/billing">
+                        <DropdownMenuItem>
+                            <CreditCard />
+                            Billing
+                        </DropdownMenuItem>
+                    </Link>
+                    <Link to="/notifications">
+                        <DropdownMenuItem>
+                            <Bell />
+                            Notifications
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="!bg-inherit hover:!bg-inherit hover:!text-destructive"
+                >
                     <LogOut />
                     Log out
                 </DropdownMenuItem>
