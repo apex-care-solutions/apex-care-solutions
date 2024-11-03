@@ -1,181 +1,183 @@
-generator client {
-  provider = "prisma-client-js"
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+  datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+  }
 
-enum contactMethod {
-  EMAIL
-  PHONE
-  SMS
-  NONE
-}
+  enum contactMethod {
+    EMAIL
+    PHONE
+    SMS
+    NONE
+  }
 
-enum userType {
-  ADMIN
-  TECHNICIAN
-  HELPDESK_MANAGER
-  CUSTOMER
-}
+  enum userType {
+    ADMIN
+    TECHNICIAN
+    HELPDESK_MANAGER
+    CUSTOMER
+  }
 
-model Service {
-  id               Int               @id @default(autoincrement())
-  name             String
-  description      String?
-  createdAt        DateTime          @default(now())
-  packageServices  PackageService[]
-}
+  model Service {
+    id               Int               @id @default(autoincrement())
+    name             String
+    description      String?
+    createdAt        DateTime          @default(now())
+    packageServices  PackageService[]
+  }
 
-model PackageService {
-  id           Int       @id @default(autoincrement())
-  packageId    Int
-  serviceId    Int
-  createdAt    DateTime  @default(now())
-  
-  package      Package   @relation(fields: [packageId], references: [id])
-  service      Service   @relation(fields: [serviceId], references: [id])
-}
+  model PackageService {
+    id           Int       @id @default(autoincrement())
+    packageId    Int
+    serviceId    Int
+    createdAt    DateTime  @default(now())
+    
+    package      Package   @relation(fields: [packageId], references: [id])
+    service      Service   @relation(fields: [serviceId], references: [id])
+  }
 
-model Package {
-  id               Int               @id @default(autoincrement())
-  name             String
-  description      String?
-  price            Float
-  createdAt        DateTime          @default(now())
-  subscriptions    Subscription[]
-  packagePromotions PackagePromotion[]
-  packageServices  PackageService[]
-}
+  model Package {
+    id               Int               @id @default(autoincrement())
+    name             String
+    description      String?
+    price            Float
+    createdAt        DateTime          @default(now())
+    subscriptions    Subscription[]
+    packagePromotions PackagePromotion[]
+    packageServices  PackageService[]
+  }
 
-model PackagePromotion {
-  id           Int      @id @default(autoincrement())
-  packageId    Int
-  discount     Float
-  validUntil   DateTime
-  createdAt    DateTime  @default(now())
-  
-  package      Package   @relation(fields: [packageId], references: [id])
-}
+  model PackagePromotion {
+    id           Int      @id @default(autoincrement())
+    packageId    Int
+    discount     Float
+    validUntil   DateTime
+    createdAt    DateTime  @default(now())
+    
+    package      Package   @relation(fields: [packageId], references: [id])
+  }
 
-model Subscription {
-  id               Int       @id @default(autoincrement())
-  userId           Int
-  packageId        Int
-  startDate        DateTime
-  endDate          DateTime?
-  createdAt        DateTime  @default(now())
-  
-  user             User      @relation(fields: [userId], references: [id])
-  package          Package   @relation(fields: [packageId], references: [id])
-  term             Term?
-}
+  model Subscription {
+    id               Int       @id @default(autoincrement())
+    userId           Int
+    packageId        Int
+    startDate        DateTime
+    endDate          DateTime?
+    createdAt        DateTime  @default(now())
+    
+    user             User      @relation(fields: [userId], references: [id])
+    package          Package   @relation(fields: [packageId], references: [id])
+    term             Term?
+  }
 
-model Term {
-  id           Int       @id @default(autoincrement())
-  subscriptionId Int     @unique
-  duration     Int
-  createdAt    DateTime @default(now())
-  
-  subscription Subscription @relation(fields: [subscriptionId], references: [id])
-}
+  model Term {
+    id           Int       @id @default(autoincrement())
+    subscriptionId Int     @unique
+    duration     Int
+    createdAt    DateTime @default(now())
+    
+    subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  }
 
-model User {
-  id                  Int           @id @default(autoincrement())
-  username            String
-  firstName           String
-  lastName            String
-  email               String        @unique
-  password            String
-  phone               String
-  preferredContactMethod contactMethod @default(NONE)
-  userType            userType
-  createdAt           DateTime      @default(now())
-  jobRequests            JobRequest[]
-  subscriptions       Subscription[]
-  chats               Chat[]
-  staff               Staff?        
-}
+  model User {
+    id                  Int           @id @default(autoincrement())
+    username            String        @unique
+    firstName           String
+    lastName            String
+    email               String        @unique
+    password            String
+    phone               String
+    address             String?
+    avatar              String?
+    preferredContactMethod contactMethod @default(NONE)
+    userType            userType
+    createdAt           DateTime      @default(now())
+    jobRequests         JobRequest[]
+    subscriptions       Subscription[]
+    chats               Chat[]
+    staff               Staff?        
+  }
 
-model JobRequest {
-  id               Int       @id @default(autoincrement())
-  userId           Int
-  description      String
-  createdAt        DateTime  @default(now())
-  
-  user             User      @relation(fields: [userId], references: [id])
-  jobs             Job[]
-}
+  model JobRequest {
+    id               Int       @id @default(autoincrement())
+    userId           Int
+    description      String
+    createdAt        DateTime  @default(now())
+    
+    user             User      @relation(fields: [userId], references: [id])
+    jobs             Job[]
+  }
 
-model Job {
-  id               Int       @id @default(autoincrement())
-  jobRequestId        Int
-  technicianId     Int
-  createdAt        DateTime  @default(now())
-  
-  jobRequest          JobRequest   @relation(fields: [jobRequestId], references: [id])
-  technician       Technician @relation(fields: [technicianId], references: [id])
-  jobStatusUpdates JobStatusUpdate[]
-}
+  model Job {
+    id               Int       @id @default(autoincrement())
+    jobRequestId        Int
+    technicianId     Int
+    createdAt        DateTime  @default(now())
+    
+    jobRequest          JobRequest   @relation(fields: [jobRequestId], references: [id])
+    technician       Technician @relation(fields: [technicianId], references: [id])
+    jobStatusUpdates JobStatusUpdate[]
+  }
 
-model JobStatusUpdate {
-  id               Int       @id @default(autoincrement())
-  jobId            Int
-  jobStatusId      Int
-  updatedAt        DateTime  @default(now())
-  
-  job              Job       @relation(fields: [jobId], references: [id])
-  jobStatus        JobStatus @relation(fields: [jobStatusId], references: [id])
-}
+  model JobStatusUpdate {
+    id               Int       @id @default(autoincrement())
+    jobId            Int
+    jobStatusId      Int
+    updatedAt        DateTime  @default(now())
+    
+    job              Job       @relation(fields: [jobId], references: [id])
+    jobStatus        JobStatus @relation(fields: [jobStatusId], references: [id])
+  }
 
-model JobStatus {
-  id               Int       @id @default(autoincrement())
-  status           String
-  createdAt        DateTime  @default(now())
-  jobStatusUpdates JobStatusUpdate[]
-}
+  model JobStatus {
+    id               Int       @id @default(autoincrement())
+    status           String
+    createdAt        DateTime  @default(now())
+    jobStatusUpdates JobStatusUpdate[]
+  }
 
-model Chat {
-  id               Int       @id @default(autoincrement())
-  staffId          Int
-  userId           Int
-  message          String
-  createdAt        DateTime  @default(now())
-  
-  staff            Staff     @relation(fields: [staffId], references: [id])
-  user             User      @relation(fields: [userId], references: [id])
-}
+  model Chat {
+    id               Int       @id @default(autoincrement())
+    staffId          Int
+    userId           Int
+    message          String
+    createdAt        DateTime  @default(now())
+    
+    staff            Staff     @relation(fields: [staffId], references: [id])
+    user             User      @relation(fields: [userId], references: [id])
+  }
 
-model Staff {
-  id               Int       @id @default(autoincrement())
-  userId           Int       @unique
-  name             String
-  role             String
-  createdAt        DateTime  @default(now())
-  chats            Chat[]
-  technician       Technician?
-  helpdesks        Helpdesk[]
-  
-  user             User      @relation(fields: [userId], references: [id])
-}
+  model Staff {
+    id               Int       @id @default(autoincrement())
+    userId           Int       @unique
+    name             String
+    role             String
+    createdAt        DateTime  @default(now())
+    chats            Chat[]
+    technician       Technician?
+    helpdesks        Helpdesk[]
+    
+    user             User      @relation(fields: [userId], references: [id])
+  }
 
-model Technician {
-  id                  Int           @id @default(autoincrement())
-  staffId             Int           @unique
-  specialty           String
-  createdAt           DateTime      @default(now())
-  
-  staff               Staff         @relation(fields: [staffId], references: [id])
-  jobs                Job[]
-}
+  model Technician {
+    id                  Int           @id @default(autoincrement())
+    staffId             Int           @unique
+    specialty           String
+    createdAt           DateTime      @default(now())
+    
+    staff               Staff         @relation(fields: [staffId], references: [id])
+    jobs                Job[]
+  }
 
-model Helpdesk {
-  id               Int       @id @default(autoincrement())
-  staffId          Int
-  message          String
-  createdAt        DateTime  @default(now())
-  
-  staff            Staff     @relation(fields: [staffId], references: [id])
-}
+  model Helpdesk {
+    id               Int       @id @default(autoincrement())
+    staffId          Int
+    message          String
+    createdAt        DateTime  @default(now())
+    
+    staff            Staff     @relation(fields: [staffId], references: [id])
+  }
