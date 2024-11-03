@@ -62,7 +62,7 @@ export const ProfileCard = () => {
                     </div>
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-end">
+            <CardFooter className="flex justify-end pb-0">
                 <Button
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"

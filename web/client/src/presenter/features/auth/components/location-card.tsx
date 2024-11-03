@@ -11,7 +11,7 @@ import { UserRepository } from "@/domain/repository";
 import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
 import { useSession } from "../context/auth-provider";
 
-export function OrganizationCard() {
+export function LocationCard() {
     const userlocationRepo = new UserRepository(apexCareApi);
     const [location, setLocation] = useState<string>("");
     const [mapUrl, setMapUrl] = useState<string>("");
@@ -53,7 +53,7 @@ export function OrganizationCard() {
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
                     onSubmit={(e) => {
-                        userlocationRepo.update(user.id, {location});
+                        userlocationRepo.update(user.id, { location });
                     }}
                 >
                     Confirm
