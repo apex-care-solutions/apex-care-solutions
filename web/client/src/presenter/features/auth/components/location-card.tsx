@@ -12,16 +12,17 @@ import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api"
 import { useSession } from "../context/auth-provider";
 
 export function LocationCard() {
-    const userlocationRepo = new UserRepository(apexCareApi);
-    const [location, setLocation] = useState<string>("");
-    const [mapUrl, setMapUrl] = useState<string>("");
-
+    const userRepository = new UserRepository(apexCareApi);
+    const [address, setAddress] = useState<string>("");
     const [user] = useSession();
 
-    if (!user) {
-        return;
-    }
-    useEffect(() => {}, [location]);
+    useEffect(() => {
+        if (user) {
+            userRepository.findById(String(user.id)).then((userData) => {
+                setAddress(userData.address)
+            });
+        }
+    }, [user]);
 
     return (
         <Card className="bg-neutral-100 border-none">
@@ -33,27 +34,20 @@ export function LocationCard() {
                     <p>Address</p>
                     <input
                         type="text"
-                        className="w-full p-1"
+                        className="w-full p-2"
+                        value={address}
                         onChange={(e) => {
-                            setLocation(e.target.value);
+                            setAddress(e.target.value);
                         }}
                     />
                 </form>
-                <div className="flex items-center justify-center bg-gray-100">
-                    <iframe
-                        src={mapUrl}
-                        width="600"
-                        height="450"
-                        loading="lazy"
-                    ></iframe>
-                </div>
             </CardContent>
             <CardFooter className="flex justify-end w-full">
                 <Button
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
-                    onSubmit={(e) => {
-                        userlocationRepo.update(user.id, { location });
+                    onClick={(e) => {
+                        userRepository.update(String(user.id), { address });
                     }}
                 >
                     Confirm

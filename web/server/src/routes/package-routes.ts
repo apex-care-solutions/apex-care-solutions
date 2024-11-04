@@ -9,8 +9,8 @@ import {
 
 export const packageRouter = Router();
 
-packageRouter.get("/package", getAllPackages);
-packageRouter.get("/package/:id", getPackageById);
-packageRouter.post("/package", createPackage);
-packageRouter.put("/package/:id", updatePackage);
-packageRouter.delete("/package/:id", deletePackage);
+packageRouter.get("/", getAllPackages);
+packageRouter.get("/:id", getPackageById);
+packageRouter.post("/", createPackage);
+packageRouter.put("/:id", updatePackage);
+packageRouter.delete("/:id", deletePackage);

@@ -22,7 +22,7 @@ export const userRoutes = {
             method: "POST",
             route: `/users`,
         }),
-    "PUT /users/:id": (url: string, { id }: { id: string }, body: User) =>
+    "PUT /users/:id": (url: string, { id }: { id: string }, body: Partial<User>) =>
         API.route<User>({
             url,
             method: "PUT",

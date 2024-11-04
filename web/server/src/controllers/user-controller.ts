@@ -1,5 +1,6 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
+import { prisma } from "../repositories/prisma";
 
 export const getAllUsers = async (
     req: Request,
@@ -65,12 +66,23 @@ async function fetchAllUsers(): Promise<User[]> {
     throw new Error("Method not implemented.");
 }
 
-async function fetchUserById(id: string): Promise<User> {
-    throw new Error("Method not implemented.");
+async function fetchUserById(id: string): Promise<User | null> {
+    return await prisma.user.findUnique({
+        where: {
+            id: Number(id)
+        },
+    });
 }
 
-async function modifyUser(id: string, userData: any): Promise<boolean> {
-    throw new Error("Method not implemented.");
+async function modifyUser(id: string, userData: any): Promise<User> {
+    return await prisma.user.update({
+        data: {
+            ...userData
+        },
+        where: {
+            id: Number(id)
+        }
+    })                                            
 }
 
 async function removeUser(id: string): Promise<boolean> {
