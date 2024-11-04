@@ -9,8 +9,8 @@ import {
 
 export const requestRouter = Router();
 
-requestRouter.get("/request", getAllRequests);
-requestRouter.get("/request/:id", getRequestById);
-requestRouter.post("/request", createRequest);
-requestRouter.put("/request/:id", updateRequest);
-requestRouter.delete("/request/:id", deleteRequest);
+requestRouter.get("/", getAllRequests);
+requestRouter.get("/:id", getRequestById);
+requestRouter.post("/", createRequest);
+requestRouter.put("/:id", updateRequest);
+requestRouter.delete("/:id", deleteRequest);

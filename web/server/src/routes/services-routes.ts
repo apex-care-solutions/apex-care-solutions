@@ -9,8 +9,8 @@ import {
 
 export const servicesRouter = Router();
 
-servicesRouter.get("/services", getAllServices);
-servicesRouter.get("/services/:id", getServiceById);
-servicesRouter.post("/services", createService);
-servicesRouter.put("/services/:id", updateService);
-servicesRouter.delete("/services/:id", deleteService);
+servicesRouter.get("/", getAllServices);
+servicesRouter.get("/:id", getServiceById);
+servicesRouter.post("/", createService);
+servicesRouter.put("/:id", updateService);
+servicesRouter.delete("/:id", deleteService);

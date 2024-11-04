@@ -9,8 +9,8 @@ import {
 
 export const subscriptionsRouter = Router();
 
-subscriptionsRouter.get("/subscriptions", getAllSubscriptions);
-subscriptionsRouter.get("/subscriptions/:id", getSubscriptionById);
-subscriptionsRouter.post("/subscriptions", createSubscription);
-subscriptionsRouter.put("/subscriptions/:id", updateSubscription);
-subscriptionsRouter.delete("/subscriptions/:id", deleteSubscription);
+subscriptionsRouter.get("/", getAllSubscriptions);
+subscriptionsRouter.get("/:id", getSubscriptionById);
+subscriptionsRouter.post("/", createSubscription);
+subscriptionsRouter.put("/:id", updateSubscription);
+subscriptionsRouter.delete("/:id", deleteSubscription);

@@ -12,5 +12,6 @@ export function Account() {
                 <LocationCard />
             </Card>
         </div>
+        
     );
 }

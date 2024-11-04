@@ -6,6 +6,7 @@ import { Landing } from "../../views/landing";
 import { Footer } from "@/components/layout/footer";
 import { JobHistoryView } from "@/presenter/features/job/views/job-history";
 import { NotFound } from "../../views/not-found";
+import { Account } from "../../views/account";
 
 export function CoreNavigation() {
     const [user] = useSession();

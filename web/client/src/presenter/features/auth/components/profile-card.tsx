@@ -8,18 +8,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { UserRepository } from "@/domain/repository";
 import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "../context/auth-provider";
 
 export const ProfileCard = () => {
-    const userRepository = new UserRepository(apexCareApi); 
+    const userRepository = new UserRepository(apexCareApi);
+    const [username, setUsername] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [user] = useSession();
 
-    if(!user) {
-        return 
-    }  
+    useEffect(() => {
+        if (user) {
+            userRepository.findById(String(user.id)).then((userData) => {
+                setUsername(userData.username);
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+            });
+        }
+    }, [user]);
+
+    if (!user) {
+        return null;
+    }
 
     return (
         <Card className="bg-neutral-100 border-none rounded-none">
@@ -35,26 +46,38 @@ export const ProfileCard = () => {
                                 alt="UserImage"
                                 className="rounded-full"
                             />
-                            <p>Rory</p>
+                            <p>{user.username}</p>
                         </div>
                         <form className="flex flex-col w-full mr-5">
                             <div className="flex flex-col m-5 w-full">
+                                <p>Username</p>
+                                <input
+                                    type="text"
+                                    className="bg-white w-full p-2"
+                                    id="username"
+                                    value={username}
+                                    onChange={(e) => {
+                                        setUsername(e.target.value);
+                                    }}
+                                />
                                 <p>First name</p>
                                 <input
                                     type="text"
-                                    className="bg-white w-full p-1"
+                                    className="bg-white w-full p-2"
                                     id="firstName"
-                                    onChange={(e)=> {
-                                        setFirstName(e.target.value)
+                                    value={firstName}
+                                    onChange={(e) => {
+                                        setFirstName(e.target.value);
                                     }}
                                 />
                                 <p>Last name</p>
                                 <input
                                     type="text"
-                                    className="bg-white w-full p-1"
+                                    className="bg-white w-full p-2"
                                     id="lastName"
-                                    onChange={(e)=> {
-                                        setLastName(e.target.value)
+                                    value={lastName}
+                                    onChange={(e) => {
+                                        setLastName(e.target.value);
                                     }}
                                 />
                             </div>
@@ -66,8 +89,12 @@ export const ProfileCard = () => {
                 <Button
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
-                    onSubmit={() => {
-                        userRepository.update(user.id,{firstName, lastName})
+                    onClick={() => {
+                        userRepository.update(String(user.id), {
+                            username,
+                            firstName,
+                            lastName,
+                        });
                     }}
                 >
                     Confirm
