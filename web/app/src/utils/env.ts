@@ -30,9 +30,6 @@ export const DATABASE_URL = requireEnv<string>(
 );
 
 /*** SERVICES ***/
-/** OPEN AI API **/
-export const OPENAI_SECRET = requireEnv<string>("OPENAI_SECRET", "");
-
 /** WHATSAPP API **/
 export const S_WA_TOKEN = requireEnv<string>("S_WA_TOKEN", "S_WA_TOKEN");
 export const S_WA_PHONE_ID = requireEnv<string>(

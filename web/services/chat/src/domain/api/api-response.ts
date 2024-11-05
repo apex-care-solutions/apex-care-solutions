@@ -1,8 +1,8 @@
-export type APIResponse = {
+export type APIResponse<T> = {
     success: boolean,
     statusCode: number,
     message?: string,
-    data?: any,
+    data?: T,
     error?: string,
     redirect?: string
 }

@@ -21,33 +21,9 @@ export const URL = requireEnv<string>("URL", "http://localhost");
 
 /*** ENCRYPTION ***/
 export const JWT_SECRET = requireEnv<string>("JWT_SECRET", "JWT_SECRET");
-export const SALT_ROUNDS = requireEnv<number>("SALT_ROUNDS", 10);
-
-/*** DATABASE ***/
-export const DATABASE_URL = requireEnv<string>(
-    "DATABASE_URL",
-    "postgres://apex_admin:apex_admin@postgres:5432/apex_care_db",
-);
+export const ALLOWED_ORIGIN = requireEnv<string>("ALLOWED_ORIGIN", "http://localhost:3000");
 
 /*** SERVICES ***/
 /** OPEN AI API **/
 export const OPENAI_SECRET = requireEnv<string>("OPENAI_SECRET", "");
-
-/** WHATSAPP API **/
-export const S_WA_TOKEN = requireEnv<string>("S_WA_TOKEN", "S_WA_TOKEN");
-export const S_WA_PHONE_ID = requireEnv<string>(
-    "S_WA_PHONE_ID",
-    "S_WA_PHONE_ID",
-);
-export const S_WA_ACCOUNT_NUMBER = requireEnv<string>(
-    "S_WA_ACCOUNT_NUMBER",
-    "S_WA_ACCOUNT_NUMBER",
-);
-export const S_WA_JOB_NOTIFY = requireEnv<string>(
-    "S_WA_JOB_NOTIFY",
-    "S_WA_JOB_NOTIFY",
-);
-export const HASH_ROUNDS = requireEnv<number>(
-    "HASH_ROUNDS",
-    10,
-);
+export const APEX_CARE_API_BASE_URL = requireEnv<string>("APEX_CARE_API_BASE_URL", "http://localhost:3000/api/v1");

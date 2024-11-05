@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
-import { JWT_SECRET } from "../env";
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from "../env";
 
 export interface AuthenticatedSocket extends Socket {
     user?: {

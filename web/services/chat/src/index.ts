@@ -1,12 +1,15 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
-import * as env from "./utils/env";
 import cors from "cors";
 import cookieParser from 'cookie-parser';
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { classifyAndRespond } from "./lib/openai";
-import { AuthenticatedSocket, authenticateSocket } from "./utils/auth/socket";
+import { AuthenticatedSocket, authenticateSocket } from "./utils/middleware/authMiddleware";
+import { ALLOWED_ORIGIN, APEX_CARE_API_BASE_URL, PORT } from "./utils/env";
+import { classifyAndRespond } from "./service/openai";
+import { ApexCareApi } from "./service/apex-care/apex-care-api";
+import { ChatRepository } from "./repository/apex-care/chat-repository";
+import { ServiceRepository } from "./repository/apex-care/service-repository";
 
 dotenv.config();
 
@@ -14,14 +17,14 @@ const app: Application = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: ALLOWED_ORIGIN,
         methods: ['GET', 'POST'],
         credentials: true,
     },
 });
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ALLOWED_ORIGIN,
     credentials: true,
 }));
 
@@ -41,33 +44,22 @@ io.on("connection", async (socket) => {
     }
 
     socket.on("chatMessage", async (message: string) => {
+        const apexCareApi = new ApexCareApi(APEX_CARE_API_BASE_URL, { 'Authorization': `Bearer ${token}` })
+        const chatRepository = new ChatRepository(apexCareApi);
+        const serviceRepository = new ServiceRepository(apexCareApi)
+
         if (!user) {
             socket.emit("error", "User not authenticated");
             return;
         }
 
         try {
-            const createdMessage = await fetch(`http://localhost:3000/api/v1/chat/${chatId}/message`, {
-                method: 'POST',
-                credentials: "include",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                 },
-                body: JSON.stringify({
-                    message: message,
-                    userId: Number(user.id),
-                    chatId: Number(chatId)
-                })
-            }).then(res => res.json());
+            const createdMessageResponse = await chatRepository.createChatMessage(chatId, user.id, message)
+            const chatResponse = await chatRepository.findById(chatId);
 
-            const chat = await fetch(`http://localhost:3000/api/v1/chat/${chatId}`, {
-                method: 'GET',
-                credentials: "include",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                 },            }).then(res => res.json());
+            let createdMessage = createdMessageResponse.data;
+            let chat = chatResponse.data;
+
 
             io.to(chatId).emit("chatMessage", JSON.stringify({ ...createdMessage, user: user }));
 
@@ -76,18 +68,9 @@ io.on("connection", async (socket) => {
                 content: chatMessage.message
             })) || []);
 
-            const createdAutomatedMessage = await fetch(`http://localhost:3000/api/v1/chat/${chatId}/message`, {
-                method: 'POST',
-                credentials: "include",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                 },                body: JSON.stringify({
-                    message: gptResponse.userReply,
-                    userId: 101,
-                    chatId: Number(chatId)
-                })
-            }).then(res => res.json());
+            chatRepository.createChatMessage(chatId, 101, message);
+
+            const createdAutomatedMessage = await chatRepository.createChatMessage(chatId, 101, message);
 
             io.to(chatId).emit("chatMessage", JSON.stringify({
                 message: createdAutomatedMessage.message,
@@ -114,6 +97,9 @@ io.on("connection", async (socket) => {
     });
 
     socket.on("action", async (payload: string) => {
+        const apexCareApi = new ApexCareApi(APEX_CARE_API_BASE_URL, { 'Authorization': `Bearer ${token}` })
+        const chatRepository = new ChatRepository(apexCareApi);
+
         let payloadJson: {
             action: string,
             data: any
@@ -126,6 +112,13 @@ io.on("connection", async (socket) => {
 
 
         try {
+            chatRepository.createJobForChat(chatId, {
+                userId: user.id,
+                chatId: Number(chatId),
+                serviceName: payloadJson.data.serviceName,
+                urgency: payloadJson.data.urgency,
+                description: "",
+            })
             let actions: { [key: string]: () => Promise<void> } = {
                 confirmCreateRequest: async () => {
                     const jobRequest = await fetch(`http://localhost:3000/api/v1/chat/${chatId}/job`, {
@@ -165,6 +158,6 @@ io.on("connection", async (socket) => {
 });
 
 
-httpServer.listen(env.PORT, () => {
-    console.log(`Server listening at http://localhost:${env.PORT}`);
+httpServer.listen(PORT, () => {
+    console.log(`Server listening at http://localhost:${PORT}`);
 });
