@@ -3,7 +3,7 @@ import { decodeToken, strictlyAuthorized, strictlyHeaderAuthentication, strictly
 
 
 export default function middleware(request: NextRequest) {
-  let response: Promise<NextResponse<unknown> | null | undefined> = strictlyHeaderAuthentication(/.*/,decodeToken(
+  let response: Promise<NextResponse<unknown> | null | undefined> = strictlyHeaderAuthentication(/api\/v1.*/,decodeToken(
     /.*/,
     strictlyUnauthorized("/")(
       /^(\/auth\/.*)?$/,

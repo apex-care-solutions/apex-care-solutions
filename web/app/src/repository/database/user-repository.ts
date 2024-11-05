@@ -1,4 +1,4 @@
-import { User } from "@/domain/models/user";
+import { User, userType } from "@/domain/models";
 import { IRepository } from "./repository";
 import { prisma } from ".";
 
@@ -21,9 +21,18 @@ export class UserRepository implements IRepository<User> {
         });
     }
 
-    async create(entity: User): Promise<User> {
+    async create(entity: {
+        username: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        password: string;
+        userType: userType
+    }): Promise<User> {
         return await prisma.user.create({
-            data: entity,
+            data: {...entity
+            },
         });
     }
 

@@ -14,7 +14,9 @@ export const strictlyAuthorized =
       !route ||
       (payload.request.nextUrl.pathname.match(route) && !payload.data?.user)
     )
-      return NextResponse.redirect(new URL(redirectUrl, payload.request.url));
+      {
+        console.log("strictly authorized", payload.request.url)
+        return NextResponse.redirect(new URL(redirectUrl, payload.request.url));}
 
     if (!!next) return next(payload);
   };
@@ -56,7 +58,9 @@ export const strictlyUnauthorized =
     if (
       !route ||
       (payload.request.nextUrl.pathname.match(route) && !authUser)
-    ) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    ) {
+      console.log("strictly bearer authorized", payload.request.url)
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })};
 
     if (!!next) return next(payload);
   };

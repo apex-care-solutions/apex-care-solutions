@@ -2,27 +2,35 @@
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { JWT_SECRET } from "@/utils/env";
 import { createResponse } from "@/utils/api";
-import { User } from "@/domain/models";
 import { UserRepository } from "@/repository/database/user-repository";
 import { APIResponse } from "@/domain/api/api-response";
 import { UserAuth } from "../features/auth/context/auth-provider";
 import { NextRequest } from "next/server";
 import { hashPassword, verifyPassword } from "@/lib/crypt";
 
-export async function registerUser(user: User) {
+export async function registerUser(user: {
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+}) {
     try {
         const userRepository = new UserRepository();
         const hashedPassword = await hashPassword(user.password);
-        await userRepository.create({
-                ...user,
+        let {confirmPassword: _, ...userData} = user;
+        let newUser = await userRepository.create({
+                ...userData,
                 password: hashedPassword,
                 userType: "CUSTOMER",
         });
         return createResponse({status: "OK", redirect: "/auth/login"}) as APIResponse<undefined>;
     } catch (e) {
+        console.error(e);
         return createResponse({status:"INTERNAL_SERVER_ERROR",  error: e as string}) as APIResponse<undefined>;
     }
 }
@@ -62,7 +70,7 @@ export async function logoutUser() {
         const nextCookies = await cookies();
         nextCookies.delete("token");
 
-        return createResponse({status: "OK", redirect: "/auth/login"});
+            return createResponse({status: "OK", redirect: "/auth/login"});
     } catch (e) {
         console.error("Logout error:", e);
         return createResponse({status: "INTERNAL_SERVER_ERROR", error: e as string});
