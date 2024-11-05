@@ -102,7 +102,7 @@ export async function authenticateRequest(request: NextRequest) {
 
 export async function authenticateToken(token: string | undefined) {
     try {
-        if (!token)  return createResponse({status: "UNAUTHORIZED", error: "Not authenticated"});
+        if (!token) throw new Error("User Not Authorized!")
         const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
         return payload
     } catch (e) {
