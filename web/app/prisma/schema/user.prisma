@@ -1,0 +1,34 @@
+    enum userType {
+    ADMIN
+    TECHNICIAN
+    HELPDESK_MANAGER
+    CUSTOMER
+  }
+
+    enum contactMethod {
+    EMAIL
+    PHONE
+    SMS
+    NONE
+  }
+
+  
+  model User {
+    id                  Int           @id @default(autoincrement())
+    username            String        @unique
+    firstName           String
+    lastName            String
+    email               String        @unique
+    password            String
+    phone               String
+    address             String?
+    avatar              String?
+    preferredContactMethod contactMethod @default(NONE)
+    userType            userType
+    createdAt           DateTime      @default(now())
+    job                 Job[]
+    subscriptions       Subscription[]
+    chatParticipant     ChatParticipant[]
+    chatMessages        ChatMessage[]
+    technician               Technician?        
+  }

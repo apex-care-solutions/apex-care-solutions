@@ -12,27 +12,47 @@ services:
             - "5432:5432"
         restart: always
 
-    server:
+    app:
         build:
             context: .
-            dockerfile: Dockerfile.server
+            dockerfile: Dockerfile.app
+        depends_on:
+            - postgres
+        ports:
+            - "3000:3000"
+        environment:
+            NODE_ENV: development
+            DATABASE_URL: postgres://apex_admin:apex_admin@postgres:5432/apex_care_db
+            PORT: 3000
+            HOST: 0.0.0.0
+        restart: always
+        volumes:
+            - ./web/app:/app
+            - /app/node_modules
+        command: >
+            sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
+        env_file:
+            - ./web/app/.env
+
+    service-chat:
+        build:
+            context: .
+            dockerfile: Dockerfile.service.chat
         depends_on:
             - postgres
         ports:
             - "3333:3333"
         environment:
             NODE_ENV: development
-            DATABASE_URL: postgres://apex_admin:apex_admin@postgres:5432/apex_care_db
             PORT: 3333
             HOST: 0.0.0.0
         restart: always
         volumes:
-            - ./web/server:/app
+            - ./web/services/chat:/app
             - /app/node_modules
-        command: >
-            sh -c "npx prisma generate && npx prisma migrate deploy && npm run dev"
+        command: npm run dev
         env_file:
-            - ./web/server/.env
+            - ./web/services/chat/.env
 
 volumes:
     postgres_data:

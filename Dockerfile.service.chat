@@ -1,0 +1,18 @@
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY /web/services/chat/package*.json ./
+
+RUN npm install
+
+# Copy the rest of the server code
+COPY /web/services/chat ./
+
+# Expose port
+EXPOSE 3333
+
+# Start the server with nodemon for live-reloading
+CMD ["npx", "nodemon", "src/index.ts"]
