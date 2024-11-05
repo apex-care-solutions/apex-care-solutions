@@ -53,7 +53,7 @@ export function AccountDropdown() {
                                 alt={user?.username}
                             />
                             <AvatarFallback className="rounded-lg">
-                                {user?.username.toUpperCase()[0]}
+                                {user?.username?.toUpperCase()?.[0]}
                             </AvatarFallback>
                         </Avatar>
                         <div className="grid flex-1 text-left text-sm leading-tight">
