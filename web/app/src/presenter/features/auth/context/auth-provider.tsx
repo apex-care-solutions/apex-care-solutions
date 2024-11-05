@@ -33,7 +33,6 @@ export function AuthProvider({
     children: ReactNode;
 }) {
     const [userAuth, setUserAuth] = useState<UserAuth | undefined>(user);
-
     return (
         <AuthContext.Provider value={[userAuth, setUserAuth]}>
             {children}

@@ -26,7 +26,7 @@
     preferredContactMethod contactMethod @default(NONE)
     userType            userType
     createdAt           DateTime      @default(now())
-    job                 Job[]
+    job                 Job[]         
     subscriptions       Subscription[]
     chatParticipant     ChatParticipant[]
     chatMessages        ChatMessage[]

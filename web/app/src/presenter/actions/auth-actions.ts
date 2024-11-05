@@ -80,8 +80,7 @@ export async function getAuthUser(): Promise<APIResponse<UserAuth | undefined>> 
     try {
         const nextCookies = await cookies();
         const token = nextCookies.get("token")?.value;
-        const userRes = await authenticateToken(token);
-        const user = userRes?.data;
+        const user = await authenticateToken(token);
         return createResponse({status: "OK", data: user}) as APIResponse<UserAuth>;
     } catch (e) {
         console.error("Get user error:", e);

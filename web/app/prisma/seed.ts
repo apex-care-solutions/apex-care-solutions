@@ -28,6 +28,8 @@ async function main() {
     skipDuplicates: true,
   });
 
+  await prisma.user.deleteMany();
+
     const gptGerrie = await prisma.user.findFirst({
         where: {
             id: 101
