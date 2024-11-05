@@ -62,7 +62,6 @@ export async function logoutUser() {
         const nextCookies = await cookies();
         nextCookies.delete("token");
 
-        redirect("/auth/login");
         return createResponse({status: "OK", redirect: "/auth/login"});
     } catch (e) {
         console.error("Logout error:", e);
