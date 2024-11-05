@@ -48,7 +48,6 @@ export async function loginUser({username, password}:{username: string, password
         const token = await new SignJWT(secureUser)
             .setProtectedHeader({ alg: "HS256" })
             .setIssuedAt()
-            .setExpirationTime("2h")
             .sign(new TextEncoder().encode(JWT_SECRET));
 
         const nextCookies = await cookies();
@@ -77,15 +76,16 @@ export async function logoutUser() {
     }
 }
 
-export async function getAuthUser() {
+export async function getAuthUser(): Promise<APIResponse<UserAuth | undefined>> {
     try {
         const nextCookies = await cookies();
         const token = nextCookies.get("token")?.value;
-        const user = authenticateToken(token);
-        return createResponse({status: "OK", data: user});
+        const userRes = await authenticateToken(token);
+        const user = userRes?.data;
+        return createResponse({status: "OK", data: user}) as APIResponse<UserAuth>;
     } catch (e) {
         console.error("Get user error:", e);
-        return createResponse({status: "INTERNAL_SERVER_ERROR", error: e as string});
+        return createResponse({status: "INTERNAL_SERVER_ERROR", error: e as string}) as APIResponse<undefined>;
     }
 }
 
@@ -93,7 +93,7 @@ export async function authenticateRequest(request: NextRequest) {
     try {
         let authHeader = request.headers.get("Authentication");
         let token = authHeader?.split("Bearer ")[1];
-        const user = authenticateToken(token);
+        const user = await authenticateToken(token);
         return createResponse({status: "OK", data: user});
     } catch (e) {
         console.error("Get user error:", e);
