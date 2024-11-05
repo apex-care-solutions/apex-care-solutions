@@ -1,0 +1,1 @@
+export type { PackageService } from "@prisma/client";

@@ -1,0 +1,34 @@
+  
+  model PackageService {
+    packageId    Int
+    serviceName    String
+    createdAt    DateTime  @default(now())
+    
+    package      Package   @relation(fields: [packageId], references: [id])
+    service      Service   @relation(fields: [serviceName], references: [name])
+
+    @@id([packageId, serviceName])
+    @@index([packageId])
+    @@index([serviceName])
+  }
+
+  model Package {
+    id               Int               @id @default(autoincrement())
+    name             String
+    description      String?
+    price            Float
+    createdAt        DateTime          @default(now())
+    subscriptions    Subscription[]
+    packagePromotions PackagePromotion[]
+    packageServices  PackageService[]
+  }
+
+  model PackagePromotion {
+    id           Int      @id @default(autoincrement())
+    packageId    Int
+    discount     Float
+    validUntil   DateTime
+    createdAt    DateTime  @default(now())
+    
+    package      Package   @relation(fields: [packageId], references: [id])
+  }

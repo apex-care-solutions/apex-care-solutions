@@ -1,0 +1,1 @@
+export type { PackagePromotion } from "@prisma/client";

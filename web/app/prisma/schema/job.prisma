@@ -1,0 +1,37 @@
+  model Job {
+    id               Int         @id @default(autoincrement())
+    userId           Int         
+    technicianId     Int?        
+    description      String    
+    createdAt        DateTime    @default(now())
+    urgency          Int
+    
+    serviceName        String
+    chatId           Int  
+
+    service          Service     @relation(fields: [serviceName], references: [name])
+    chat             Chat        @relation(fields: [chatId], references: [id])
+    user             User        @relation(fields: [userId], references: [id])
+    technician       Technician? @relation(fields: [technicianId], references: [id])
+    jobStatusUpdates JobStatusUpdate[]
+
+    @@unique([chatId])          
+  }
+
+  model JobStatusUpdate {
+    id               Int       @id @default(autoincrement())
+    jobId            Int
+    jobStatusId      Int
+    updatedAt        DateTime  @default(now())
+    createdAt        DateTime  @default(now())
+    
+    job              Job       @relation(fields: [jobId], references: [id])
+    jobStatus        JobStatus @relation(fields: [jobStatusId], references: [id])
+  }
+
+  model JobStatus {
+    id               Int       @id @default(autoincrement())
+    status           String    @unique
+    createdAt        DateTime  @default(now())
+    jobStatusUpdates JobStatusUpdate[]
+  }

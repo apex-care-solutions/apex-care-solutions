@@ -1,0 +1,22 @@
+  model Subscription {
+    id               Int       @id @default(autoincrement())
+    userId           Int
+    packageId        Int
+    startDate        DateTime
+    endDate          DateTime?
+    createdAt        DateTime  @default(now())
+    
+    user             User      @relation(fields: [userId], references: [id])
+    package          Package   @relation(fields: [packageId], references: [id])
+    term             Term?
+  }
+
+  model Term {
+    id           Int       @id @default(autoincrement())
+    subscriptionId Int     @unique
+    duration     Int
+    createdAt    DateTime @default(now())
+    
+    subscription Subscription @relation(fields: [subscriptionId], references: [id])
+  }
+
