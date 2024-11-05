@@ -49,7 +49,6 @@ export function LandingNav() {
 
 export function Nav() {
     const [user] = useSession();
-    console.log(user);
     return (
         <nav className="flex justify-between font-bold text-sm gap-10">
             <div className="flex justify-center items-center gap-10 flex-1">

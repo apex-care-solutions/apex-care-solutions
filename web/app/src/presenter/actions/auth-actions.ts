@@ -1,21 +1,21 @@
 "use server";
 
-import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { JWT_SECRET, SALT_ROUNDS } from "@/utils/env";
+import { JWT_SECRET } from "@/utils/env";
 import { createResponse } from "@/utils/api";
 import { User } from "@/domain/models";
 import { UserRepository } from "@/repository/database/user-repository";
 import { APIResponse } from "@/domain/api/api-response";
 import { UserAuth } from "../features/auth/context/auth-provider";
 import { NextRequest } from "next/server";
+import { hashPassword, verifyPassword } from "@/lib/crypt";
 
 export async function registerUser(user: User) {
     try {
         const userRepository = new UserRepository();
-        const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+        const hashedPassword = await hashPassword(user.password);
         await userRepository.create({
                 ...user,
                 password: hashedPassword,
@@ -31,7 +31,7 @@ export async function loginUser({username, password}:{username: string, password
     try {
         const userRepository = new UserRepository();
         const user = await userRepository.findByUsername(username);
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user || !(await verifyPassword(password, user.password))) {
             return createResponse({status: "UNAUTHORIZED", error: "Invalid credentials"}) as APIResponse<undefined>;
         }
 
