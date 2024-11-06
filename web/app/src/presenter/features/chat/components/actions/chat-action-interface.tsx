@@ -2,7 +2,6 @@
 import { Button } from "@/presenter/components/ui/button";
 import { Socket } from "socket.io-client";
 import { ChatAction } from "./chat-action";
-import { Job } from "@/domain/models";
 
 export function ChatActionInterface({
     socket,
@@ -25,6 +24,7 @@ export function ChatActionInterface({
             <div className="flex gap-2.5">
                 {options.map((option) => (
                     <Button
+                        key={option}
                         size="sm"
                         onClick={() => {
                             socket.emit(
