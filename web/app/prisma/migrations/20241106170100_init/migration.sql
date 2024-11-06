@@ -107,14 +107,6 @@ CREATE TABLE "Service" (
 );
 
 -- CreateTable
-CREATE TABLE "ServiceSkill" (
-    "serviceName" TEXT NOT NULL,
-    "skillId" INTEGER NOT NULL,
-
-    CONSTRAINT "ServiceSkill_pkey" PRIMARY KEY ("serviceName","skillId")
-);
-
--- CreateTable
 CREATE TABLE "Subscription" (
     "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
@@ -137,12 +129,12 @@ CREATE TABLE "Term" (
 );
 
 -- CreateTable
-CREATE TABLE "TechnicianSkill" (
+CREATE TABLE "TechnicianService" (
     "technicianId" INTEGER NOT NULL,
-    "skillId" INTEGER NOT NULL,
+    "serviceName" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "TechnicianSkill_pkey" PRIMARY KEY ("technicianId","skillId")
+    CONSTRAINT "TechnicianService_pkey" PRIMARY KEY ("technicianId","serviceName")
 );
 
 -- CreateTable
@@ -152,16 +144,6 @@ CREATE TABLE "Technician" (
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Technician_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Skill" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -201,25 +183,16 @@ CREATE INDEX "PackageService_packageId_idx" ON "PackageService"("packageId");
 CREATE INDEX "PackageService_serviceName_idx" ON "PackageService"("serviceName");
 
 -- CreateIndex
-CREATE INDEX "ServiceSkill_serviceName_idx" ON "ServiceSkill"("serviceName");
-
--- CreateIndex
-CREATE INDEX "ServiceSkill_skillId_idx" ON "ServiceSkill"("skillId");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Term_subscriptionId_key" ON "Term"("subscriptionId");
 
 -- CreateIndex
-CREATE INDEX "TechnicianSkill_technicianId_idx" ON "TechnicianSkill"("technicianId");
+CREATE INDEX "TechnicianService_technicianId_idx" ON "TechnicianService"("technicianId");
 
 -- CreateIndex
-CREATE INDEX "TechnicianSkill_skillId_idx" ON "TechnicianSkill"("skillId");
+CREATE INDEX "TechnicianService_serviceName_idx" ON "TechnicianService"("serviceName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Technician_userId_key" ON "Technician"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Skill_name_key" ON "Skill"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
@@ -246,7 +219,7 @@ ALTER TABLE "Job" ADD CONSTRAINT "Job_serviceName_fkey" FOREIGN KEY ("serviceNam
 ALTER TABLE "Job" ADD CONSTRAINT "Job_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "Chat"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Job" ADD CONSTRAINT "Job_technicianId_fkey" FOREIGN KEY ("technicianId") REFERENCES "Technician"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -267,12 +240,6 @@ ALTER TABLE "PackageService" ADD CONSTRAINT "PackageService_serviceName_fkey" FO
 ALTER TABLE "PackagePromotion" ADD CONSTRAINT "PackagePromotion_packageId_fkey" FOREIGN KEY ("packageId") REFERENCES "Package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ServiceSkill" ADD CONSTRAINT "ServiceSkill_serviceName_fkey" FOREIGN KEY ("serviceName") REFERENCES "Service"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ServiceSkill" ADD CONSTRAINT "ServiceSkill_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "Skill"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -282,10 +249,10 @@ ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_packageId_fkey" FOREIGN 
 ALTER TABLE "Term" ADD CONSTRAINT "Term_subscriptionId_fkey" FOREIGN KEY ("subscriptionId") REFERENCES "Subscription"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TechnicianSkill" ADD CONSTRAINT "TechnicianSkill_technicianId_fkey" FOREIGN KEY ("technicianId") REFERENCES "Technician"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TechnicianService" ADD CONSTRAINT "TechnicianService_technicianId_fkey" FOREIGN KEY ("technicianId") REFERENCES "Technician"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TechnicianSkill" ADD CONSTRAINT "TechnicianSkill_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "Skill"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TechnicianService" ADD CONSTRAINT "TechnicianService_serviceName_fkey" FOREIGN KEY ("serviceName") REFERENCES "Service"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Technician" ADD CONSTRAINT "Technician_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Technician" ADD CONSTRAINT "Technician_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
