@@ -2,7 +2,6 @@ import { JobStatus } from "@/domain/models/job-status";
 import { JobStatusUpdate } from "@/domain/models/job-status-update";
 import { cn } from "@/presenter/lib/utils";
 import { formatDateTime } from "@/presenter/utils/date";
-import moment from "moment";
 
 export function JobStatusTrack({
     jobStatuses,

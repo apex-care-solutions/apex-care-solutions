@@ -1,32 +1,22 @@
-model TechnicianSkill {
+model TechnicianService {
   technicianId  Int
-  skillId       Int
+  serviceName       String
   createdAt     DateTime     @default(now())
 
   technician    Technician   @relation(fields: [technicianId], references: [id])
-  skill         Skill        @relation(fields: [skillId], references: [id])
+  service        Service    @relation(fields: [serviceName], references: [name])
 
-  @@id([technicianId, skillId])
+  @@id([technicianId, serviceName])
   @@index([technicianId])
-  @@index([skillId])
+  @@index([serviceName])
 }
 
   model Technician {
     id                  Int           @id @default(autoincrement())
     createdAt           DateTime      @default(now())
     userId              Int
-    user                User          @relation(fields: [userId], references: [id])          
+    user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)          
     jobs                Job[]
-    technicianSkills    TechnicianSkill[]
+    technicianSkills    TechnicianService[]
     @@unique([userId])
   }
-
-  model Skill {
-  id          Int                @id @default(autoincrement())
-  name        String             @unique
-  description String?
-  createdAt   DateTime           @default(now())
-  technicians TechnicianSkill[]
-  serviceSkills    ServiceSkill[]
-}
-

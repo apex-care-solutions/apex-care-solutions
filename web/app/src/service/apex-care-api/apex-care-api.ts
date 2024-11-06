@@ -1,4 +1,4 @@
-import { API, RequestHeaders } from "../api";
+import { API, RequestHeaders } from "@/domain/api/api";
 import { apexCareRoutes } from "./routes";
 
 export type ApexAPIResponse<T> = {

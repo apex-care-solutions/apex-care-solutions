@@ -17,8 +17,17 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
                 serviceName,
                 urgency,
                 description,
+                jobStatusUpdates: {
+                    createMany: {
+                         data : [
+                            {jobStatusId: 1},
+                            {jobStatusId: 2}
+                         ]
+                   }
+                }
             },
         });
+
 
         const chat = await prisma.chat.update({
             where: {

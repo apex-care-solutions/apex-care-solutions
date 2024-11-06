@@ -5,17 +5,5 @@
     createdAt        DateTime          @default(now())
     packageServices  PackageService[]
     job              Job[]
-    serviceSkills    ServiceSkill[]
+    technicianServices TechnicianService[]
   }
-
-model ServiceSkill {
-  serviceName String
-  skillId   Int
-
-  service Service @relation(fields: [serviceName], references: [name])
-  skill   Skill   @relation(fields: [skillId], references: [id])
-
-  @@id([serviceName, skillId])
-  @@index([serviceName])
-  @@index([skillId])
-}

@@ -30,6 +30,7 @@ export function JobCard({
     job: JobDetails;
     jobStatuses: JobStatus[];
 }) {
+    console.log(job);
     return (
         <Card className="flex flex-col p-5 gap-10">
             <div className="w-full transition duration-200 flex justify-between items-center">

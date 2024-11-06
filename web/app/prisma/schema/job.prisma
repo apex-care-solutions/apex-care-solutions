@@ -11,7 +11,7 @@
 
     service          Service     @relation(fields: [serviceName], references: [name])
     chat             Chat        @relation(fields: [chatId], references: [id])
-    user             User        @relation(fields: [userId], references: [id])
+    user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
     technician       Technician? @relation(fields: [technicianId], references: [id])
     jobStatusUpdates JobStatusUpdate[]
 
