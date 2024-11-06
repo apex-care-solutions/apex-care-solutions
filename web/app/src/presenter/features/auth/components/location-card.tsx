@@ -10,14 +10,36 @@ import {
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
 import { useSession } from "../context/auth-provider";
-import { UserRepository } from "@/repository/database/user-repository";
-import { apexCareApi } from "@/service/apex-care-api/apex-care-api";
+import { UserAuth } from "../context/auth-provider";
+import { updateUserById } from "@/presenter/actions/account-actions";
 
 export function LocationCard() {
-    const userlocationRepo = new UserRepository(apexCareApi);
-    const [location, setLocation] = useState<string>("");
+    const [address, setAddress] = useState<string>("");
+    const [user, setUser] = useSession();
 
-    const [user] = useSession();
+    useEffect(() => {
+        if (user) {
+            setAddress(String(user?.address));
+        }
+    }, [user]);
+
+    if (!user) {
+        return;
+    }
+
+    const handleConfirmClick = async () => {
+        try {
+            if (user) {
+                const updatedUser = (await updateUserById(String(user.id), {
+                    address,
+                })) as UserAuth;
+                setUser(updatedUser);
+            }
+        } catch (error) {
+            console.error("Error updating location:", error);
+        }
+    };
+
     return (
         <Card className="bg-neutral-100 border-none">
             <CardHeader>
@@ -29,9 +51,8 @@ export function LocationCard() {
                     <input
                         type="text"
                         className="w-full p-1"
-                        onChange={(e) => {
-                            setLocation(e.target.value);
-                        }}
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                     />
                 </form>
             </CardContent>
@@ -39,9 +60,7 @@ export function LocationCard() {
                 <Button
                     size="default"
                     className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
-                    onSubmit={(e) => {
-                        userlocationRepo.update(user.id, { location });
-                    }}
+                    onClick={handleConfirmClick}
                 >
                     Confirm
                 </Button>

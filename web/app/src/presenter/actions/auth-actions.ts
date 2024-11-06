@@ -10,6 +10,7 @@ import { UserAuth } from "../features/auth/context/auth-provider";
 import { NextRequest } from "next/server";
 import { hashPassword, verifyPassword } from "@/lib/crypt";
 import { revalidatePath } from "next/cache";
+import { User } from "@prisma/client";
 
 export async function registerUser(user: {
     username: string;
@@ -109,4 +110,18 @@ export async function authenticateToken(token: string | undefined) {
     } catch (e) {
         return undefined;
     }
+}
+
+export async function setUserToken(user: Partial<User>){
+    const token = await new SignJWT(user)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .sign(new TextEncoder().encode(JWT_SECRET));
+
+    const nextCookies = await cookies();
+    nextCookies.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+    });
 }
