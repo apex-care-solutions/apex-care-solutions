@@ -1,5 +1,6 @@
-import { API } from "../../api";
-import { Chat, ChatMessage } from "../apex-care-types";
+import { API } from "@/domain/api/api";
+import { Chat, ChatMessage } from "@prisma/client";
+
 
 export const chatRoutes = {
     "GET /chat/": (        

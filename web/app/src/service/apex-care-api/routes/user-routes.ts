@@ -1,5 +1,5 @@
-import { API } from "../../api";
-import { ApiBaseRouteCollection } from "../../api-route";
+import { API } from "@/domain/api/api";
+import { ApiBaseRouteCollection } from "@/domain/api/api-route";
 import { User } from "@/domain/models/user";
 
 export const userRoutes = {

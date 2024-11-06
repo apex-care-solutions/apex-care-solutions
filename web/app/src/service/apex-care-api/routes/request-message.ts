@@ -1,6 +1,6 @@
 import { RequestMessage } from "@/domain/models/request-message";
-import { API } from "../../api";
-import { ApiBaseRouteCollection } from "../../api-route";
+import { API } from "@/domain/api/api";
+import { ApiBaseRouteCollection } from "@/domain/api/api-route";
 
 export const requestMessageRoutes = {
     "GET /request-messages": (

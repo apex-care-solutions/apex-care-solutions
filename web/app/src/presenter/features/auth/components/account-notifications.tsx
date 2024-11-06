@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
     Card,
@@ -8,7 +10,7 @@ import {
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
 
-export function NotificationSettings() {
+export function NotificationCard() {
     const [emailNotifications, setEmailNotifications] = useState(true);
     const [smsNotifications, setSmsNotifications] = useState(false);
     const [pushNotifications, setPushNotifications] = useState(true);

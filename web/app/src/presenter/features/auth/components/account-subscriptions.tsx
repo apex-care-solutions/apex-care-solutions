@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react";
 import {
     Card,
@@ -8,7 +10,7 @@ import {
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
 
-export function SubscriptionSettings() {
+export function SubscriptionCard() {
     const [newsletters, setNewsletters] = useState(true);
     const [specialOffers, setSpecialOffers] = useState(false);
     const [productUpdates, setProductUpdates] = useState(true);

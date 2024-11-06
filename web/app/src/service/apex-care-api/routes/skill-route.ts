@@ -1,6 +1,7 @@
+import { API } from "@/domain/api/api";
+import { ApiBaseRouteCollection } from "@/domain/api/api-route";
 import { Skill } from "@/domain/models/skill";
-import { API } from "../../api";
-import { ApiBaseRouteCollection } from "../../api-route";
+
 
 export const skillsRoutes = {
     "GET /skills": (url: string, query: { take: number; page: number }) =>

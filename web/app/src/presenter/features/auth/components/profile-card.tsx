@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Card,
     CardContent,
@@ -6,10 +8,10 @@ import {
     CardTitle,
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
-import { UserRepository } from "@/domain/repository";
-import { apexCareApi } from "@/domain/data/services/apex-care-api/apex-care-api";
 import { useState } from "react";
 import { useSession } from "../context/auth-provider";
+import { UserRepository } from "@/repository/database/user-repository";
+import { apexCareApi } from "@/service/apex-care-api/apex-care-api";
 
 export const ProfileCard = () => {
     const userRepository = new UserRepository(apexCareApi);

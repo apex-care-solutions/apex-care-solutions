@@ -1,4 +1,4 @@
-("");
+"use client";
 import { useState } from "react";
 import {
     Card,
@@ -9,7 +9,7 @@ import {
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
 
-export function AppearanceSettings() {
+export function AppearanceCard() {
     const [theme, setTheme] = useState("light");
     const [fontSize, setFontSize] = useState("medium");
 
