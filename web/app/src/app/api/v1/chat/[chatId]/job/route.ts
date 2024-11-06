@@ -6,14 +6,14 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
     const authUser = await authenticateRequest(req);
     if (!authUser) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const chatId = Number(params.chatId);
+    const { chatId } = await params;
     const { userId, serviceName, urgency, description } = await req.json();
 
     try {
         const jobRequest = await prisma.job.create({
             data: {
                 userId: Number(userId),
-                chatId,
+                chatId: Number(chatId),
                 serviceName,
                 urgency,
                 description,

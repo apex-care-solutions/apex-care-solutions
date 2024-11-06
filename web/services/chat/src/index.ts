@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { AuthenticatedSocket, authenticateSocket } from "./utils/middleware/authMiddleware";
-import { ALLOWED_ORIGIN, APEX_CARE_API_BASE_URL, PORT } from "./utils/env";
+import { ALLOWED_ORIGIN, APEX_CARE_API_BASE_URL, HOST, PORT } from "./utils/env";
 import { classifyAndRespond } from "./service/openai";
 import { ApexCareApi } from "./service/apex-care/apex-care-api";
 import { ChatRepository } from "./repository/apex-care/chat-repository";
@@ -59,7 +59,6 @@ io.on("connection", async (socket) => {
 
             let createdMessage = createdMessageResponse.data;
             let chat = chatResponse.data;
-
 
             io.to(chatId).emit("chatMessage", JSON.stringify({ ...createdMessage, user: user }));
 
@@ -158,6 +157,6 @@ io.on("connection", async (socket) => {
 });
 
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, HOST, () => {
     console.log(`Server listening at http://localhost:${PORT}`);
 });

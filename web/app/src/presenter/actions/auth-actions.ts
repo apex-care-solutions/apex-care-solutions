@@ -9,6 +9,7 @@ import { APIResponse } from "@/domain/api/api-response";
 import { UserAuth } from "../features/auth/context/auth-provider";
 import { NextRequest } from "next/server";
 import { hashPassword, verifyPassword } from "@/lib/crypt";
+import { revalidatePath } from "next/cache";
 
 export async function registerUser(user: {
     username: string;
@@ -68,8 +69,8 @@ export async function logoutUser() {
     try {
         const nextCookies = await cookies();
         nextCookies.delete("token");
-
-            return createResponse({status: "OK", redirect: "/auth/login"});
+        revalidatePath("/")
+        return createResponse({status: "OK", redirect: "/auth/login"});
     } catch (e) {
         console.error("Logout error:", e);
         return createResponse({status: "INTERNAL_SERVER_ERROR", error: e as string});

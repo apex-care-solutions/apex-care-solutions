@@ -20,6 +20,7 @@ services:
             - postgres
         ports:
             - "3000:3000"
+            - "5555:5555"
         environment:
             NODE_ENV: development
             DATABASE_URL: postgres://apex_admin:apex_admin@postgres:5432/apex_care_db
@@ -44,6 +45,7 @@ services:
             - "3333:3333"
         environment:
             NODE_ENV: development
+            APEX_CARE_API_BASE_URL: http://app:3000
             PORT: 3333
             HOST: 0.0.0.0
         restart: always

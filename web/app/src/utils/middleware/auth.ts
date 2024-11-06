@@ -14,9 +14,7 @@ export const strictlyAuthorized =
       !route ||
       (payload.request.nextUrl.pathname.match(route) && !payload.data?.user)
     )
-      {
-        console.log("strictly authorized", payload.request.url)
-        return NextResponse.redirect(new URL(redirectUrl, payload.request.url));}
+        return NextResponse.redirect(new URL(redirectUrl, payload.request.url));
 
     if (!!next) return next(payload);
   };

@@ -57,10 +57,9 @@ export function RegisterView() {
         },
     });
 
-    const onSubmit = async (data: User) => {
+    const onSubmit = async (data: User & { confirmPassword: string }) => {
         try {
             let res = await registerUser(data);
-            console.log(res);
             if (res.redirect) window.location.href = res.redirect;
         } catch (error) {
             console.error("Registration failed:", error);

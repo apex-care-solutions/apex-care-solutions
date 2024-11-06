@@ -1,42 +1,30 @@
+"use client";
 import { Badge } from "@/presenter/components/ui/badge";
 import { Button } from "@/presenter/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/presenter/components/ui/card";
 import { Input } from "@/presenter/components/ui/input";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useChat } from "../hooks/useChat";
 import { useSession } from "../../auth/context/auth-provider";
 import { MessageBubble } from "./message-bubble";
 import { cn } from "@/presenter/lib/utils";
 import { AcceptAction } from "./actions/accept-action";
 import Link from "next/link";
+import { Chat, ChatMessage, User } from "@/domain/models";
 
-export function Chat() {
-    const { chatId } = useParams();
-    const [searchParams] = useSearchParams();
-    const {
-        chatHistory,
-        sendMessage,
-        loading,
-        action,
-        socket,
-        chat,
-        jobRequest,
-    } = useChat(chatId);
+export function ChatBlock({
+    chat,
+    history,
+}: {
+    chat: Chat;
+    history: (ChatMessage & { user: User })[];
+}) {
+    const { chatHistory, sendMessage, loading, action, socket, jobRequest } =
+        useChat(chat, history);
+
     const [input, setInput] = useState("");
-    const chatRepository = new ChatRepository(apexCareApi);
-    const message = searchParams.get("message");
-    const navigate = useNavigate();
     const [user] = useSession();
-
-    useEffect(() => {
-        if (!chatId) {
-            chatRepository.create().then((chat) => {
-                if (chat.data)
-                    window.location.href = `/chat/${chat.data.id}?message=${message}`;
-            });
-        }
-    }, [message, chatId]);
 
     const handleSendMessage = () => {
         if (input.trim()) {

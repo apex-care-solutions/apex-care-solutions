@@ -26,25 +26,25 @@ export const chatRoutes = {
             route: `/chat/${id}`,
         }),
     
-    "POST /chat/:id/messages": (url: string, { id }: { id: string }, body: {
+    "POST /chat/:id/message": (url: string, { id }: { id: string }, body: {
         message: string,
         userId: number,
     }) =>
         API.route<ChatMessage>({
             url,
             method: "POST",
-            route: `/chat/${id}/messages`,
+            route: `/chat/${id}/message`,
             body,
             headers: {
                 "Content-Type": "application/json",
             }
         }),
 
-    "GET /chat/:id/messages": (url: string, { id }: { id: string }) =>
+    "GET /chat/:id/message": (url: string, { id }: { id: string }) =>
         API.route<ChatMessage[]>({
             url,
             method: "GET",
-            route: `/chat/${id}/messages`,
+            route: `/chat/${id}/message`,
             headers: {
                 "Content-Type": "application/json",
             }

@@ -26,4 +26,4 @@ export const ALLOWED_ORIGIN = requireEnv<string>("ALLOWED_ORIGIN", "http://local
 /*** SERVICES ***/
 /** OPEN AI API **/
 export const OPENAI_SECRET = requireEnv<string>("OPENAI_SECRET", "");
-export const APEX_CARE_API_BASE_URL = requireEnv<string>("APEX_CARE_API_BASE_URL", "http://localhost:3000/api/v1");
+export const APEX_CARE_API_BASE_URL = requireEnv<string>("APEX_CARE_API_BASE_URL", "http://app:3000/api/v1");

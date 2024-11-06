@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { AuthenticatedSocket } from "../utils/middleware/authMiddleware";
+import { AuthenticatedSocket } from "../../utils/middleware/authMiddleware";
 
 export function chatMessageHandler(io: Server, socket: AuthenticatedSocket, token: string) {
     return async (message: string) => {

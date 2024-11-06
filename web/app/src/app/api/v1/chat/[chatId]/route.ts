@@ -6,7 +6,7 @@ export async function GET(req: NextRequest, { params }: { params: { chatId: stri
     const authUser = await authenticateRequest(req);
     if (!authUser) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { chatId } = params;
+    const { chatId } = await params;
     try {
         const chat = await prisma.chat.findUnique({
             where: { id: Number(chatId) },

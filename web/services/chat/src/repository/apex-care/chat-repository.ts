@@ -18,11 +18,11 @@ export class ChatRepository {
     }
 
     async createChatMessage(id: string, userId: number, message: string): Promise<APIResponse<ChatMessage>> {
-        return await this.apexCareApi.request("POST /chat/:id/messages", { id }, { userId, message });
+        return await this.apexCareApi.request("POST /chat/:id/message", { id }, { userId, message });
     }
 
     async getChatMessages(id: string): Promise<APIResponse<ChatMessage[]>> {
-        return await this.apexCareApi.request("GET /chat/:id/messages", { id });
+        return await this.apexCareApi.request("GET /chat/:id/message", { id });
     }
 
     async createJobForChat(id: string, jobData: Partial<Job>): Promise<APIResponse<Job>> {

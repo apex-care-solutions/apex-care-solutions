@@ -3,12 +3,12 @@ import { decodeToken, strictlyAuthorized, strictlyHeaderAuthentication, strictly
 
 
 export default function middleware(request: NextRequest) {
-  let response: Promise<NextResponse<unknown> | null | undefined> = strictlyHeaderAuthentication(/api\/v1.*/,decodeToken(
+  let response: Promise<NextResponse<unknown> | null | undefined> = strictlyHeaderAuthentication(/api\/v.*/,decodeToken(
     /.*/,
     strictlyUnauthorized("/")(
       /^(\/auth\/.*)?$/,
       strictlyAuthorized("/auth/login")(
-        /^(?!\/auth\/)(?!\/assets\/)(?!\/$)(?!\/_next\/static\/).*/
+        /^(?!\/auth\/)(?!\/assets\/)(?!\/$)(?!\/_next\/static\/)(?!\/api\/v.*).*/
       )
     )
   ))({ request });

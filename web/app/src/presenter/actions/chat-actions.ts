@@ -53,7 +53,9 @@ export async function getChats() {
 export async function getChatMessages(chatId: number) {
     "use server";
     try {
-        const messages = await prisma.chatMessage.findMany({ where: { chatId } });
+        const messages = await prisma.chatMessage.findMany({ where: { chatId }, include: {
+            user: true
+        } });
         return createResponse({status: "OK", data: messages});
     } catch (e) {
         console.error(e);

@@ -60,7 +60,6 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
             params: query,
             withCredentials: true,  
         };
-    
         try {
             const response = await axios.request<APIResponse<T>>(config);
             return response.data;
