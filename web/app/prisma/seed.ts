@@ -29,8 +29,6 @@ export async function seedDb(){
     skipDuplicates: true,
   });
 
-  await prisma.user.deleteMany();
-
     const gptGerrie = await prisma.user.findFirst({
         where: {
             id: 101
