@@ -2,11 +2,8 @@ import express, { Application } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
-import { AuthenticatedSocket } from "./utils/middleware/authMiddleware";
 import { ALLOWED_ORIGIN, HOST, PORT } from "./utils/env";
 import { SocketServer } from "./lib/socket/socket-server";
-import { ActionHandler } from "./domain/controllers/action/action-controller";
-import { ChatMessageHandler } from "./domain/controllers/chat-message/chat-message-controller";
 
 dotenv.config();
 

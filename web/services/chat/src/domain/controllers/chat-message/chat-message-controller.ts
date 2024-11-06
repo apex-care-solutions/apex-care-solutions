@@ -28,8 +28,6 @@ export class ChatMessageHandler extends SocketHandler{
                 const chat = await chatRepository.findById(chatId);
                 let services = await serviceRepository.findAll();
 
-                console.log(services)
-
                 this.io.to(chatId).emit("chatMessage", JSON.stringify({ ...message, user: user }));
     
                 const gptResponse = await classifyAndRespond(message.message, chat?.chatMessages.map((chatMessage: any) => ({
