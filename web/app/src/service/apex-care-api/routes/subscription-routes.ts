@@ -1,6 +1,6 @@
+import { API } from "@/domain/api/api";
+import { ApiBaseRouteCollection } from "@/domain/api/api-route";
 import { Subscription } from "@/domain/models/subscription";
-import { API } from "../../api";
-import { ApiBaseRouteCollection } from "../../api-route";
 
 export const subscriptionRoutes = {
     "GET /subscriptions": (

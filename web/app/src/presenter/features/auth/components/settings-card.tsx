@@ -5,9 +5,22 @@ import {
     CardHeader,
     CardTitle,
 } from "@/presenter/components/ui/card";
-import Link from "next/link";
 
-export const SettingsCard = () => {
+type SettingOption =
+    | "account"
+    | "privacy"
+    | "safety"
+    | "notifications"
+    | "subscriptions"
+    | "appearance";
+
+type SettingsCardProps = {
+    onSelectSetting: (setting: SettingOption) => void;
+};
+
+export const SettingsCard: React.FC<SettingsCardProps> = ({
+    onSelectSetting,
+}) => {
     return (
         <Card className="bg-neutral-100 h-full flex flex-col">
             <CardHeader>
@@ -15,16 +28,46 @@ export const SettingsCard = () => {
             </CardHeader>
             <CardContent className="flex-grow">
                 <div className="flex flex-col border-b-2 p-2">
-                    <Link href="/account">Account</Link>
-                    <Link href="/account/privacy">Privacy</Link>
-                    <Link href="/account/safety">Safety</Link>
-                    <Link href="/account/notification">Notifications</Link>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("account")}
+                    >
+                        Account
+                    </button>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("privacy")}
+                    >
+                        Privacy
+                    </button>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("safety")}
+                    >
+                        Safety
+                    </button>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("notifications")}
+                    >
+                        Notifications
+                    </button>
                 </div>
                 <div className="flex flex-col border-b-2 p-2">
-                    <Link href="/account/subscriptions">Subscriptions</Link>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("subscriptions")}
+                    >
+                        Subscriptions
+                    </button>
                 </div>
                 <div className="flex flex-col p-2">
-                    <Link href="/account/appearance">Appearance</Link>
+                    <button
+                        className="text-left"
+                        onClick={() => onSelectSetting("appearance")}
+                    >
+                        Appearance
+                    </button>
                 </div>
             </CardContent>
             <CardFooter className="flex">

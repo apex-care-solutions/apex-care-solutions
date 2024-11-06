@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import {
     Card,
@@ -8,7 +9,7 @@ import {
 } from "@/presenter/components/ui/card";
 import { Button } from "@/presenter/components/ui/button";
 
-export function SafetySettings() {
+export function SafetyCard() {
     const [twoFactorAuth, setTwoFactorAuth] = useState(false);
     const [loginAlerts, setLoginAlerts] = useState(true);
     const [sessionTimeout, setSessionTimeout] = useState("15 minutes");

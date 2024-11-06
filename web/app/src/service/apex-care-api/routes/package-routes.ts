@@ -1,6 +1,7 @@
+import { API } from "@/domain/api/api";
+import { ApiBaseRouteCollection } from "@/domain/api/api-route";
 import { Package } from "@/domain/models/package";
-import { API } from "../../api";
-import { ApiBaseRouteCollection } from "../../api-route";
+
 
 export const packageRoutes = {
     "GET /packages": (url: string, query: { take: number; page: number }) =>

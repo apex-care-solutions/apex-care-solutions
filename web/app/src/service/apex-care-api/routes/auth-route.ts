@@ -1,4 +1,4 @@
-import { API } from "../../api";
+import { API } from "@/domain/api/api";
 import { UserAuth } from "@/presenter/features/auth/context/auth-provider";
 
 export const authRoutes = {

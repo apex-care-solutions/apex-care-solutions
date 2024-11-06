@@ -1,5 +1,5 @@
+import { API } from "@/domain/api/api";
 import { Job } from "@/domain/models/job";
-import { API } from "../../api";
 import { JobStatus } from "@/domain/models/job-status";
 
 export const jobRoutes = {
