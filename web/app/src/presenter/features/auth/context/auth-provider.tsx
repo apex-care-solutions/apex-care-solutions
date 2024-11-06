@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, ReactNode, useContext, useState } from "react";
-import { LoadingView } from "../../core/views/loading-view";
 import { contactMethod, userType } from "@/domain/models";
 
 export type UserAuth = {
