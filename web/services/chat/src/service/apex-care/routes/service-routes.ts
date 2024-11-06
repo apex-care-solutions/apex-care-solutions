@@ -6,7 +6,7 @@ export const serviceRoutes = {
         API.route<Service[]>({
             url,
             method: "GET",
-            route: `/services/`,
+            route: `/service/`,
         }),
 } as const;
 

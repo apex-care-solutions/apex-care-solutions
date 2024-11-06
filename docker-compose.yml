@@ -45,7 +45,7 @@ services:
             - "3333:3333"
         environment:
             NODE_ENV: development
-            APEX_CARE_API_BASE_URL: http://app:3000
+            APEX_CARE_API_BASE_URL: http://app:3000/api/v1
             PORT: 3333
             HOST: 0.0.0.0
         restart: always

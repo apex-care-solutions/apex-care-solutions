@@ -9,9 +9,10 @@ import { useChat } from "../hooks/useChat";
 import { useSession } from "../../auth/context/auth-provider";
 import { MessageBubble } from "./message-bubble";
 import { cn } from "@/presenter/lib/utils";
-import { AcceptAction } from "./actions/accept-action";
+import { ChatActionInterface } from "./actions/chat-action-interface";
 import Link from "next/link";
 import { Chat, ChatMessage, User } from "@/domain/models";
+import { createChatMessage } from "@/presenter/actions/chat-actions";
 
 export function ChatBlock({
     chat,
@@ -26,9 +27,10 @@ export function ChatBlock({
     const [input, setInput] = useState("");
     const [user] = useSession();
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (input.trim()) {
-            sendMessage(input);
+            let { data: message } = await createChatMessage(chat.id, input);
+            if (message) sendMessage(message);
             setInput("");
         }
     };
@@ -49,8 +51,8 @@ export function ChatBlock({
             {!chat?.active || !!jobRequest ? (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-2.5 bg-primary/20 z-10">
                     <p>Chat has been closed.</p>
-                    <Link href="/history">
-                        <Button size="sm">Go to requests</Button>
+                    <Link href="/jobs">
+                        <Button size="sm">Go to jobs</Button>
                     </Link>
                 </div>
             ) : (
@@ -58,9 +60,8 @@ export function ChatBlock({
                     <div className="flex-1 overflow-y-scroll flex flex-col gap-5 items-center relative">
                         {action && socket && (
                             <div className="sticky top-0 z-10 w-full p-5 bg-border text-primary">
-                                <AcceptAction
-                                    jobType={action.data.jobType}
-                                    urgency={action.data.urgency}
+                                <ChatActionInterface
+                                    chatAction={action}
                                     socket={socket}
                                 />
                             </div>

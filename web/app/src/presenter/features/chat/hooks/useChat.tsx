@@ -2,6 +2,7 @@
 import { Chat, ChatMessage, User } from "@/domain/models";
 import { useState, useEffect, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
+import { ChatAction } from "../components/actions/chat-action";
 
 export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
     const [chatHistory, setChatHistory] =
@@ -17,16 +18,7 @@ export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
           }
         | undefined
     >();
-    const [action, setAction] = useState<
-        | {
-              action: string;
-              data: {
-                  jobType: string;
-                  urgency: string;
-              };
-          }
-        | undefined
-    >();
+    const [action, setAction] = useState<ChatAction<unknown> | undefined>();
 
     useEffect(() => {
         const newSocket = io("http://localhost:3333", {
@@ -35,12 +27,16 @@ export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
         });
 
         newSocket.on("chatMessage", (message: string) => {
-            setChatHistory((prevChat) => [...prevChat, JSON.parse(message)]);
+            let chatMessage = JSON.parse(message) as ChatMessage & {
+                user: User;
+            };
+            setChatHistory((prevChat) => [...prevChat, chatMessage]);
             setLoading(false);
         });
 
         newSocket.on("action", (message: string) => {
-            setAction(JSON.parse(message));
+            let action = JSON.parse(message);
+            setAction(action);
             setLoading(false);
         });
 
@@ -61,10 +57,10 @@ export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
     }, []);
 
     const sendMessage = useCallback(
-        (message: string) => {
+        (message: ChatMessage) => {
             if (socket) {
                 setLoading(true);
-                socket.emit("chatMessage", message);
+                socket.emit("chatMessage", JSON.stringify(message));
             }
         },
         [socket, setLoading],

@@ -5,7 +5,7 @@ import { ApexCareApi } from "../../service/apex-care/apex-care-api";
 export class ServiceRepository {
     constructor(private apexCareApi: ApexCareApi) {}
 
-    async findAll(): Promise<APIResponse<Service[]>> {
+    async findAll(): Promise<Service[]> {
         return await this.apexCareApi.request("GET /service/");
     }
 

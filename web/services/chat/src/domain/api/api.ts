@@ -49,7 +49,7 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
         query?: any;
         body?: any;
         headers?: Record<string, string>;
-    }): Promise<APIResponse<T>> {
+    }): Promise<T> {
         const config: AxiosRequestConfig = {
             method,
             url: `${url}${route}`,
@@ -61,7 +61,7 @@ export abstract class API<Routes extends Record<string, ApiRoute>> {
             withCredentials: true,  
         };
         try {
-            const response = await axios.request<APIResponse<T>>(config);
+            const response = await axios.request<T>(config);
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {

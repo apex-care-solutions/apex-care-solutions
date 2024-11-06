@@ -20,6 +20,15 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             },
         });
 
+        const chat = await prisma.chat.update({
+            where: {
+                id: Number(chatId)
+            },
+            data: {
+                active: false
+            }
+        })
+
         return NextResponse.json(jobRequest);
     } catch (error) {
         console.error("Database error:", error);

@@ -7,7 +7,6 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
     if (!authUser) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     
     const { chatId } = await params;
-
     const { message, userId } = await req.json();
 
     try {
@@ -17,6 +16,9 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
                 userId: Number(userId),
                 chatId: Number(chatId),
             },
+            include: {
+                user: true
+            }
         });
         return NextResponse.json(createdMessage);
     } catch (error) {

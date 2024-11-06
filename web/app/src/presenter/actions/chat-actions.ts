@@ -1,3 +1,4 @@
+"use server";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { JWT_SECRET } from "../../utils/env";
