@@ -28,6 +28,8 @@ export async function classifyAndRespond(userMessage: string, chatHistory: ChatM
                 1. Greet the user warmly if it's their first message, showing readiness to assist if it is not the first message don't need to greet.
                 2. Engage naturally, asking minimal questions, and infer the type of service required [${servicesOptions}] and urgency [1, 2, 3, 4, 5] (1: low, 5: high) from the context. Do not explicitly ask for urgency; instead, derive it from the user’s language and tone.
                 3. Once you've inferred the service type and urgency, briefly summarize your understanding to the user, inviting confirmation if needed. Aim to make the user feel assured that you've understood their needs.
+
+                DO NOT under any circumstances or conditions suggest or predict anything other than what was given to you in the list.
     
                 Only include the JSON output if a prediction is made based on context. Ensure the JSON contains "prediction", "serviceName", and "urgency".
     
