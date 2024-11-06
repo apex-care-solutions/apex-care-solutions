@@ -1,7 +1,6 @@
 import { JobStatus } from "@/domain/models/job-status";
 import { JobStatusUpdate } from "@/domain/models/job-status-update";
 import { cn } from "@/presenter/lib/utils";
-import { formatDateTime } from "@/presenter/utils/date";
 
 export function JobStatusTrack({
     jobStatuses,
@@ -26,7 +25,7 @@ export function JobStatusTrack({
                         <div className="flex flex-col items-center gap-2.5 text-xs">
                             <p>
                                 {statusUpdate
-                                    ? formatDateTime(statusUpdate?.updatedAt)
+                                    ? new Date(statusUpdate?.updatedAt)
                                     : "-"}
                             </p>
                             <div

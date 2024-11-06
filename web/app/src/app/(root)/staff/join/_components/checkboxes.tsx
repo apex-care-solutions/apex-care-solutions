@@ -1,23 +1,42 @@
 "use client";
-import { Checkbox } from "@/presenter/components/ui/checkbox";
+
+import { cn } from "@/presenter/lib/utils";
 import { useState } from "react";
 
-export function Checkboxes({ data }: { data: any[] }) {
+export function Checkboxes({ data }: { data: string[] }) {
     const [checks, setChecks] = useState<string[]>([]);
+
     return (
-        <div>
-            {data.map((instance) => (
-                <Checkbox
-                    onCheckedChange={(checked) => {
-                        let newChecks = [...checks];
-                        newChecks.filter((entity) => entity != instance);
-                        if (checked) newChecks.push(instance);
-                        setChecks(newChecks);
-                    }}
-                >
-                    {instance}
-                </Checkbox>
-            ))}
+        <div
+            className="grid w-full grid-flow-row auto-rows-fr gap-2.5"
+            style={{
+                gridTemplateColumns: "repeat(auto-fill, minmax(15rem, 1fr))",
+            }}
+        >
+            {data.map((instance) => {
+                let checked = checks.includes(instance);
+                return (
+                    <div
+                        key={instance}
+                        className={cn(
+                            "flex gap-2.5 px-5 py-5 border-border border-[1px] w-full rounded-sm drop-shadow-sm select-none cursor-pointer",
+                            checked && "bg-muted ",
+                        )}
+                        onClick={() => {
+                            let newChecks = [...checks].filter(
+                                (entity) => entity !== instance,
+                            );
+                            console.log(instance);
+                            if (!checked) newChecks.push(instance);
+                            setChecks(newChecks);
+                        }}
+                    >
+                        <p className="whitespace-nowrap font-bold">
+                            {instance}
+                        </p>
+                    </div>
+                );
+            })}
         </div>
     );
 }

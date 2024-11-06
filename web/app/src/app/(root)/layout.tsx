@@ -5,7 +5,6 @@ import {
     AuthProvider,
     UserAuth,
 } from "@/presenter/features/auth/context/auth-provider";
-import { prisma } from "@/repository/database";
 import { ReactNode } from "react";
 
 export default async function RootView({ children }: { children: ReactNode }) {
