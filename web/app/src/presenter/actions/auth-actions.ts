@@ -37,20 +37,6 @@ export async function registerUser(user: {
     }
 }
 
-export async function setUserToken(user: Partial<User>){
-    const token = await new SignJWT(user)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .sign(new TextEncoder().encode(JWT_SECRET));
-
-    const nextCookies = await cookies();
-    nextCookies.set("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-    });
-}
-
 export async function loginUser({username, password}:{username: string, password: string}):Promise<APIResponse<UserAuth | undefined>>  {
     try {
         const userRepository = new UserRepository();

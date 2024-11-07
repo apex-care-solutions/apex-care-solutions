@@ -63,8 +63,8 @@ export default async function TechnicianHomeView() {
                             No requests for you at the current moment, add more
                             skills to your profile to recieve more requests.
                         </p>
-                        <Link href="/profile">
-                            <Button size="sm">Go to profile</Button>
+                        <Link href="/account">
+                            <Button size="sm">Go to account</Button>
                         </Link>
                     </div>
                 )}
