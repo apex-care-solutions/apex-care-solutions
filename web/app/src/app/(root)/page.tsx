@@ -3,11 +3,7 @@ import { HomeView, LandingView } from "@/presenter/features/core";
 import TechnicianHomeView from "@/presenter/features/technician/views/technician-home-view";
 
 export default async function RootView() {
-    let user;
-    try {
-        let res = await getAuthUser();
-        user = res.data;
-    } catch {}
+    const { data: user } = await getAuthUser();
     return user ? (
         user.userType == "TECHNICIAN" ? (
             <TechnicianHomeView />

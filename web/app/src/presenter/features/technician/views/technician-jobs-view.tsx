@@ -1,11 +1,14 @@
-import { JobCard } from "../components/job-card";
 import { Button } from "@/presenter/components/ui/button";
 import Link from "next/link";
-import { getAllJobs, getJobStatuses } from "@/presenter/actions/job-actions";
+import {
+    getJobStatuses,
+    getTechnicianJobs,
+} from "@/presenter/actions/job-actions";
+import { JobCard } from "../../job/components/job-card";
 
-export async function JobsView() {
+export async function TechnicianJobsView() {
     const { data: jobStatuses } = await getJobStatuses();
-    const { data: jobs } = await getAllJobs();
+    const { data: jobs } = await getTechnicianJobs();
 
     if (!jobStatuses) return "ERROR";
 
@@ -13,20 +16,23 @@ export async function JobsView() {
         <div className="flex flex-col gap-5">
             {jobs && jobs?.length > 0 ? (
                 jobs?.map((job) => (
-                    <JobCard key={job.id} job={job} jobStatuses={jobStatuses} />
+                    <JobCard
+                        key={job.id}
+                        job={job}
+                        jobStatuses={jobStatuses}
+                        control
+                    />
                 ))
             ) : (
                 <div className="w-full h-full flex flex-col justify-center items-center gap-10 min-h-[75vh] rounded-lg">
-                    <p className="">
-                        You have yet to allow us to take care of you
-                    </p>
+                    <p className="">You have yet to take care of someone</p>
                     <p className="">...</p>
                     <div className="flex flex-col gap-2.5 justify-center items-center">
                         <p className="text-muted-foreground text-sm">
-                            Start a chat with our virtual agents.
+                            Pick a user you want to help today.
                         </p>
                         <Link href={"/chat"}>
-                            <Button>Start Chat</Button>
+                            <Button>Requests</Button>
                         </Link>
                     </div>
                 </div>

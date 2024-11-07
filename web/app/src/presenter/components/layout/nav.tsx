@@ -6,6 +6,8 @@ import { Badge } from "../ui/badge";
 import {
     ArrowRight,
     BotMessageSquare,
+    Hand,
+    HandCoins,
     History,
     MapPin,
     Pin,
@@ -87,10 +89,23 @@ export function Nav() {
             </div>
             <div className="flex items-center justify-center gap-5">
                 <div className="flex gap-5">
-                    <Link href="/chat">
+                    <Link
+                        href={
+                            user?.userType == "CUSTOMER" ? "/chat" : "/requests"
+                        }
+                    >
                         <Button variant="outline" className="font-bold">
-                            Chat
-                            <BotMessageSquare />
+                            {user?.userType == "CUSTOMER" ? (
+                                <>
+                                    Chat
+                                    <BotMessageSquare />
+                                </>
+                            ) : (
+                                <>
+                                    Requests
+                                    <HandCoins />
+                                </>
+                            )}
                         </Button>
                     </Link>
                     <Link href="/jobs">

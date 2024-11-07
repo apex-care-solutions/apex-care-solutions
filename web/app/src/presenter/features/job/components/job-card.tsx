@@ -1,30 +1,14 @@
 import { Card } from "@/presenter/components/ui/card";
-import { ArrowRight } from "lucide-react";
 import { JobStatusTrack } from "./job-status-track";
-import { Button } from "@/presenter/components/ui/button";
 import { MessageBubble } from "../../chat/components/message-bubble";
 import { TechnicianHoverCard } from "../../technician/components/technician-hover-card";
-import { JobDetails, JobStatus } from "@/domain/models";
-import Link from "next/link";
+import { JobDetails, JobStatus, Technician } from "@/domain/models";
 import { cn } from "@/presenter/lib/utils";
+import { prisma } from "@/repository/database";
+import { UserAuth } from "../../auth/context/auth-provider";
+import { Search } from "lucide-react";
 
-let technician: {
-    id: number;
-    username: string;
-    createdAt: Date;
-    title: string;
-    description: string;
-    averageRating: number;
-} = {
-    id: 1,
-    username: "werries",
-    title: "IT Technician",
-    createdAt: new Date(),
-    averageRating: 2.1,
-    description: "IT Technician @ Entelect",
-};
-
-export function JobCard({
+export async function JobCard({
     job,
     jobStatuses,
     control,
@@ -33,23 +17,39 @@ export function JobCard({
     jobStatuses: JobStatus[];
     control?: boolean;
 }) {
-    const complete = !!(
-        job.jobStatusUpdates.slice(-1)[0]?.jobStatus.status == "Complete"
-    );
-
+    const complete = !!job.jobStatusUpdates.find((jsu) => jsu.jobStatusId == 6);
+    const technician = await prisma.technician.findFirst({
+        where: {
+            jobs: {
+                some: {
+                    id: job.id,
+                },
+            },
+        },
+        include: {
+            user: true,
+        },
+    });
     return (
         <Card className="flex flex-col p-5 gap-10">
             <div className="w-full transition duration-200 flex justify-between items-center">
                 <div className="flex items-center gap-5">
-                    <TechnicianHoverCard technician={technician} />
-                    <p className="text-xl font-bold">Server Maintainance</p>
+                    {technician ? (
+                        <TechnicianHoverCard
+                            technician={{
+                                ...(technician as Technician),
+                                user: (
+                                    technician as Technician & {
+                                        user: UserAuth;
+                                    }
+                                ).user as UserAuth,
+                            }}
+                        />
+                    ) : (
+                        <Search className="h-10 w-10 rounded-full text-muted" />
+                    )}
+                    <p className="text-xl font-bold">{job.serviceName}</p>
                 </div>
-                <Link href="/job-page">
-                    <Button className="flex gap-1 items-center">
-                        View Job
-                        <ArrowRight className="h-5" />
-                    </Button>
-                </Link>
             </div>
             <JobStatusTrack
                 jobStatuses={jobStatuses}

@@ -1,10 +1,11 @@
 import { Button } from "@/presenter/components/ui/button";
 import { Card } from "@/presenter/components/ui/card";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function LandingView() {
     return (
-        <Card className="flex flex-col gap-20">
+        <div className="flex flex-col gap-20 border-none">
             <div className="flex flex-row max-md:flex-col gap-20">
                 <div className="flex-1 flex flex-col justify-center gap-5">
                     <p className="text-6xl font-bold">
@@ -21,12 +22,14 @@ export function LandingView() {
                             type="text"
                             className="flex-1 rounded-full px-5 bg-muted text-muted-foreground"
                         />
-                        <Button
-                            size="icon"
-                            className="rounded-full bg-muted text-muted-foreground hover:text-primary-foreground hover:bg-muted-foreground"
-                        >
-                            <ArrowRight />
-                        </Button>
+                        <Link href="/auth/login">
+                            <Button
+                                size="icon"
+                                className="rounded-full bg-muted text-muted-foreground hover:text-primary-foreground hover:bg-muted-foreground"
+                            >
+                                <ArrowRight />
+                            </Button>
+                        </Link>
                     </div>
                 </div>
                 <div className="flex-1 rounded-lg overflow-hidden">
@@ -37,6 +40,6 @@ export function LandingView() {
                     />
                 </div>
             </div>
-        </Card>
+        </div>
     );
 }

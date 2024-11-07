@@ -4,14 +4,14 @@ import { Button } from "@/presenter/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/presenter/components/ui/card";
 import { Input } from "@/presenter/components/ui/input";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "../hooks/useChat";
-import { useSession } from "../../auth/context/auth-provider";
+import { UserAuth, useSession } from "../../auth/context/auth-provider";
 import { MessageBubble } from "./message-bubble";
 import { cn } from "@/presenter/lib/utils";
 import { ChatActionInterface } from "./actions/chat-action-interface";
 import Link from "next/link";
-import { Chat, ChatMessage, User } from "@/domain/models";
+import { Chat, ChatMessage } from "@/domain/models";
 import { createChatMessage } from "@/presenter/actions/chat-actions";
 
 export function ChatBlock({
@@ -19,10 +19,17 @@ export function ChatBlock({
     history,
 }: {
     chat: Chat;
-    history: (ChatMessage & { user: User })[];
+    history: (ChatMessage & { user: UserAuth })[];
 }) {
-    const { chatHistory, sendMessage, loading, action, socket, jobRequest } =
-        useChat(chat, history);
+    const {
+        chatHistory,
+        setChatHistory,
+        sendMessage,
+        loading,
+        action,
+        socket,
+        jobRequest,
+    } = useChat(chat, history);
 
     const [input, setInput] = useState("");
     const [user] = useSession();
@@ -30,8 +37,14 @@ export function ChatBlock({
     const handleSendMessage = async () => {
         if (input.trim()) {
             let { data: message } = await createChatMessage(chat.id, input);
-            if (message) sendMessage(message);
-            setInput("");
+            if (message) {
+                setChatHistory((prevChat) => [
+                    ...prevChat,
+                    { ...message, user: user as UserAuth },
+                ]);
+                sendMessage(message);
+                setInput("");
+            }
         }
     };
 
@@ -92,12 +105,19 @@ export function ChatBlock({
                             </div>
                         ))}
                         {loading && (
-                            <div className="w-[80%]">
-                                <MessageBubble username="GPT Gerrie">
-                                    <div className="w-full flex justify-center">
-                                        <img src="/typing.svg" />
-                                    </div>
-                                </MessageBubble>
+                            <div
+                                className={cn(
+                                    "w-full flex px-10",
+                                    "justify-start",
+                                )}
+                            >
+                                <div className="w-[80%]">
+                                    <MessageBubble username="GPT Gerrie">
+                                        <div className="w-full flex justify-center">
+                                            <img src="/typing.svg" />
+                                        </div>
+                                    </MessageBubble>
+                                </div>
                             </div>
                         )}
                     </div>

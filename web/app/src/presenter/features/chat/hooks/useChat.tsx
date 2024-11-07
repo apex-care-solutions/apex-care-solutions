@@ -3,10 +3,15 @@ import { Chat, ChatMessage, User } from "@/domain/models";
 import { useState, useEffect, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { ChatAction } from "../components/actions/chat-action";
+import { UserAuth, useSession } from "../../auth/context/auth-provider";
 
-export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
+export function useChat(
+    chat: Chat,
+    history: (ChatMessage & { user: UserAuth })[],
+) {
+    const [user] = useSession();
     const [chatHistory, setChatHistory] =
-        useState<(ChatMessage & { user: User })[]>(history);
+        useState<(ChatMessage & { user: UserAuth })[]>(history);
 
     const [loading, setLoading] = useState(false);
     const [socket, setSocket] = useState<Socket | undefined>();
@@ -30,8 +35,10 @@ export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
             let chatMessage = JSON.parse(message) as ChatMessage & {
                 user: User;
             };
-            setChatHistory((prevChat) => [...prevChat, chatMessage]);
-            setLoading(false);
+            if (!(user?.id == chatMessage.user.id)) {
+                setChatHistory((prevChat) => [...prevChat, chatMessage]);
+                setLoading(false);
+            }
         });
 
         newSocket.on("action", (message: string) => {
@@ -68,6 +75,7 @@ export function useChat(chat: Chat, history: (ChatMessage & { user: User })[]) {
 
     return {
         chatHistory,
+        setChatHistory,
         action,
         sendMessage,
         loading,

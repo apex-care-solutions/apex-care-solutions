@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 import { JobStatus } from "@/domain/models/job-status";
 import { JobStatusUpdate } from "@/domain/models/job-status-update";
 import { cn } from "@/presenter/lib/utils";
-import { jobStatusUpdate } from "@/presenter/actions/job-actions";
+import { giveJobStatusUpdate } from "@/presenter/actions/job-actions";
 import { Job } from "@prisma/client";
 
 export function JobStatusTrack({
@@ -26,9 +26,11 @@ export function JobStatusTrack({
 
     const handleUpdate = useCallback(
         (jobStatusId: number) => {
-            jobStatusUpdate(job.id, jobStatusId).then(({ redirect }) => {
-                if (redirect) window.location.href = redirect;
-            });
+            giveJobStatusUpdate(job.id, jobStatusId + 1).then(
+                ({ redirect }) => {
+                    if (redirect) window.location.href = redirect;
+                },
+            );
         },
         [job],
     );
@@ -38,7 +40,19 @@ export function JobStatusTrack({
             const statusUpdate = jobStatusUpdates.find(
                 (jsu) => jsu.jobStatusId === status.id,
             );
-            return statusUpdate ? (
+            console.log(control && highestJobStatusUpdate == status.id);
+            return control &&
+                highestJobStatusUpdate == status.id &&
+                status.id < 6 ? (
+                <div
+                    onClick={() => {
+                        handleUpdate(status.id);
+                    }}
+                    className="text-accent font-bold hover:text-accent active:text-blue-800 select-none !cursor-pointer"
+                >
+                    Complete
+                </div>
+            ) : statusUpdate ? (
                 new Date(statusUpdate.updatedAt)
                     .toLocaleDateString("en-GB", {
                         day: "2-digit",
@@ -48,15 +62,6 @@ export function JobStatusTrack({
                         minute: "2-digit",
                     })
                     .replace(",", "")
-            ) : control && highestJobStatusUpdate + 1 == status.id ? (
-                <div
-                    onClick={() => {
-                        handleUpdate(status.id);
-                    }}
-                    className="text-accent font-bold hover:text-accent active:text-blue-800 select-none !cursor-pointer"
-                >
-                    Complete
-                </div>
             ) : (
                 "-"
             );
@@ -84,7 +89,7 @@ export function JobStatusTrack({
                                     "bg-accent",
                                 formattedDates[index] === "-" &&
                                     "border-border",
-                                status.id === highestJobStatusUpdate + 1 &&
+                                status.id === highestJobStatusUpdate &&
                                     highestJobStatus !=
                                         highestJobStatusUpdate &&
                                     "transition-all animate-pulse-accent",

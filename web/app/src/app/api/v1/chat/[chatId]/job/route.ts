@@ -3,7 +3,7 @@ import { prisma } from '@/repository/database';
 import { authenticateRequest } from '@/presenter/actions/auth-actions';
 import { revalidatePath } from 'next/cache';
 
-export async function POST(req: NextRequest, { params }: { params: { chatId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ chatId: string }> }) {
     const authUser = await authenticateRequest(req);
     if (!authUser) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
 
         
 
-        const chat = await prisma.chat.update({
+        await prisma.chat.update({
             where: {
                 id: Number(chatId)
             },

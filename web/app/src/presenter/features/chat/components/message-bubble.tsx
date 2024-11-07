@@ -39,14 +39,14 @@ export function MessageBubble({
                 </div>
             </CardHeader>
             <CardContent>
-                <p
+                <div
                     className={cn(
                         oneline && "text-nowrap overflow-hidden text-ellipsis",
                     )}
                 >
                     {" "}
                     {children}
-                </p>
+                </div>
             </CardContent>
         </Card>
     );

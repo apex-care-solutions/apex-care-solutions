@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, CreditCard, Loader2 } from "lucide-react";
+import { ArrowLeft, CreditCard } from "lucide-react";
 
 import { Button } from "@/presenter/components/ui/button";
 import {
@@ -25,45 +25,21 @@ import Link from "next/link";
 const plans = [
     {
         name: "Basic",
-        price: 10,
-        features: ["1 user", "10 projects", "5GB storage"],
+        price: 999,
     },
     {
-        name: "Pro",
-        price: 20,
-        features: [
-            "5 users",
-            "50 projects",
-            "100GB storage",
-            "Priority support",
-        ],
+        name: "Essential",
+        price: 1399,
     },
     {
-        name: "Enterprise",
-        price: 50,
-        features: [
-            "Unlimited users",
-            "Unlimited projects",
-            "1TB storage",
-            "24/7 support",
-            "Custom integrations",
-        ],
+        name: "Premium",
+        price: 1999,
     },
 ];
 
-export function SubscriptionCard() {
-    const [currentPlan, setCurrentPlan] = React.useState("Basic");
-    const [billingInterval, setBillingInterval] = React.useState("monthly");
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const handleUpgrade = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            setIsLoading(false);
-            alert("Subscription upgraded!");
-        }, 2000);
-    };
-
+export default function Page() {
+    const currentPlan = "Basic";
+    const billingInterval = "yearly";
     return (
         <div className="container mx-auto py-10 flex flex-col gap-5">
             <Link href="/account" className="flex gap-2.5">
@@ -82,27 +58,19 @@ export function SubscriptionCard() {
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-2xl font-bold">
-                                    $
+                                    R
                                     {plans
                                         .find((p) => p.name === currentPlan)
                                         ?.price.toFixed(2)}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    per{" "}
-                                    {billingInterval === "monthly"
-                                        ? "month"
-                                        : "year"}
+                                    per year
                                 </p>
                             </div>
                             <div className="flex items-center space-x-2">
                                 <Switch
                                     id="billing-interval"
                                     checked={billingInterval === "yearly"}
-                                    onCheckedChange={(checked) =>
-                                        setBillingInterval(
-                                            checked ? "yearly" : "monthly",
-                                        )
-                                    }
                                 />
                                 <label htmlFor="billing-interval">
                                     Bill yearly (save 10%)
@@ -125,10 +93,7 @@ export function SubscriptionCard() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Select
-                            value={currentPlan}
-                            onValueChange={setCurrentPlan}
-                        >
+                        <Select value={currentPlan}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select a plan" />
                             </SelectTrigger>
@@ -138,30 +103,15 @@ export function SubscriptionCard() {
                                         key={plan.name}
                                         value={plan.name}
                                     >
-                                        {plan.name} - ${plan.price.toFixed(2)}/
-                                        {billingInterval === "monthly"
-                                            ? "mo"
-                                            : "yr"}
+                                        {plan.name} - R{plan.price.toFixed(2)}
+                                        /yr
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     </CardContent>
                     <CardFooter>
-                        <Button
-                            className="w-full"
-                            onClick={handleUpgrade}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Upgrading...
-                                </>
-                            ) : (
-                                "Upgrade Plan"
-                            )}
-                        </Button>
+                        <Button className="w-full">Upgrade Plan</Button>
                     </CardFooter>
                 </Card>
             </div>

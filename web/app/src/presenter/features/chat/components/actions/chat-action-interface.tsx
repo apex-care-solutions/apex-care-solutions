@@ -16,7 +16,7 @@ export function ChatActionInterface({
     return (
         <div className="flex items-center justify-between gap-5 rounded-lg">
             <div className="font-bold flex flex-col gap-1">
-                <div className="text-xs">{meta}</div>
+                {/* <div className="text-xs">{meta}</div> */}
                 <div>{title}</div>
                 <div>{body}</div>
                 <div>{footer}</div>

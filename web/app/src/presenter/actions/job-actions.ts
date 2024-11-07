@@ -110,6 +110,7 @@ export async function jobStatusUpdate(jobId: number, jobStatusId: number) {
 
         return createResponse({status: "CREATED", data: jobStatusUpdate});
     } catch (error) {
+        console.log(error)
         return createResponse({status: "INTERNAL_SERVER_ERROR",error: error as string});
     }
 }
@@ -371,7 +372,7 @@ export async function getTechnicianJobs(){
             },
             orderBy: {
                 jobStatusUpdates: {
-                    _count: "asc"
+                    _count: "desc"
                 }
             },
             include: {

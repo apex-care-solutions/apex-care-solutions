@@ -1,6 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { UserAuth, useSession } from "../context/auth-provider";
+import { updateUserById } from "@/presenter/actions/account-actions";
+
+import { Button } from "@/presenter/components/ui/button";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/presenter/components/ui/form";
+import { Input } from "@/presenter/components/ui/input";
 import {
     Card,
     CardContent,
@@ -8,78 +24,96 @@ import {
     CardHeader,
     CardTitle,
 } from "@/presenter/components/ui/card";
-import { Button } from "@/presenter/components/ui/button";
-import { useSession } from "../context/auth-provider";
-import { UserAuth } from "../context/auth-provider";
-import { updateUserById } from "@/presenter/actions/account-actions";
 
-export const ContactCard = () => {
-    const [email, setEmail] = useState<string>("");
-    const [phone, setPhoneNumber] = useState<string>("");
+const formSchema = z.object({
+    email: z.string().email({
+        message: "Please enter a valid email address.",
+    }),
+    phone: z.string().min(1, {
+        message: "Phone number is required.",
+    }),
+});
+
+export function ContactCard() {
     const [user, setUser] = useSession();
 
-    useEffect(() => {
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            phone: "",
+        },
+    });
+
+    React.useEffect(() => {
         if (user) {
-            setEmail(String(user?.email));
-            setPhoneNumber(String(user?.phone));
+            form.reset({
+                email: String(user.email),
+                phone: String(user.phone),
+            });
         }
-    }, [user]);
+    }, [user, form]);
 
     if (!user) {
-        return;
+        return null;
     }
 
-    const handleConfirmClick = async () => {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            if (user) {
-                setUser(
-                    (await updateUserById(String(user.id), {
-                        email,
-                        phone,
-                    })) as UserAuth,
-                );
-            }
+            const updatedUser = await updateUserById(String(user?.id), values);
+            setUser(updatedUser as UserAuth);
         } catch (error) {
             console.error("Error updating contact:", error);
         }
-    };
+    }
 
     return (
-        <Card className="bg-neutral-100 border-none rounded-none">
+        <Card>
             <CardHeader>
                 <CardTitle>Contact</CardTitle>
             </CardHeader>
             <CardContent>
-                <form className="flex gap-5 w-full">
-                    <div className="w-full">
-                        <p>Email</p>
-                        <input
-                            type="email"
-                            className="w-full p-1"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className="w-full">
-                        <p>Phone</p>
-                        <input
-                            type="tel"
-                            className="w-full p-1"
-                            value={phone}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                        />
-                    </div>
-                </form>
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-4"
+                    >
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input type="email" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phone"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone</FormLabel>
+                                        <FormControl>
+                                            <Input type="tel" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </form>
+                </Form>
             </CardContent>
             <CardFooter className="flex justify-end">
-                <Button
-                    size="default"
-                    className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
-                    onClick={handleConfirmClick}
-                >
+                <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
                     Confirm
                 </Button>
             </CardFooter>
         </Card>
     );
-};
+}

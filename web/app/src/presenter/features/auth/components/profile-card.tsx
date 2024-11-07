@@ -1,5 +1,22 @@
 "use client";
 
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { UserAuth, useSession } from "../context/auth-provider";
+import { updateUserById } from "@/presenter/actions/account-actions";
+
+import { Button } from "@/presenter/components/ui/button";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/presenter/components/ui/form";
+import { Input } from "@/presenter/components/ui/input";
 import {
     Card,
     CardContent,
@@ -7,103 +24,135 @@ import {
     CardHeader,
     CardTitle,
 } from "@/presenter/components/ui/card";
-import { Button } from "@/presenter/components/ui/button";
-import { useEffect, useState } from "react";
-import { UserAuth, useSession } from "../context/auth-provider";
-import { updateUserById } from "@/presenter/actions/account-actions";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/presenter/components/ui/avatar";
+import { Badge } from "@/presenter/components/ui/badge";
 
-export const ProfileCard = () => {
-    const [username, setUsername] = useState<string>("");
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
+const formSchema = z.object({
+    username: z.string().min(2, {
+        message: "Username must be at least 2 characters.",
+    }),
+    firstName: z.string().min(1, {
+        message: "First name is required.",
+    }),
+    lastName: z.string().min(1, {
+        message: "Last name is required.",
+    }),
+});
+
+export function ProfileCard() {
     const [user, setUser] = useSession();
 
-    useEffect(() => {
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "",
+            firstName: "",
+            lastName: "",
+        },
+    });
+
+    React.useEffect(() => {
         if (user) {
-            setUsername(String(user.username));
-            setFirstName(String(user.firstName));
-            setLastName(String(user.lastName));
+            form.reset({
+                username: String(user.username),
+                firstName: String(user.firstName),
+                lastName: String(user.lastName),
+            });
         }
-    }, [user]);
+    }, [user, form]);
 
     if (!user) {
-        return;
+        return null;
     }
 
-    const handleConfirmClick = async () => {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         if (user) {
-            setUser(
-                (await updateUserById(String(user.id), {
-                    firstName,
-                    lastName,
-                    username,
-                })) as UserAuth,
-            );
+            const updatedUser = await updateUserById(String(user.id), values);
+            setUser(updatedUser as UserAuth);
         }
-    };
+    }
 
     return (
-        <Card className="bg-neutral-100 border-none rounded-none">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>Profile</CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-col w-full">
-                    <div className="flex gap-5 w-full items-center">
-                        <div className="flex flex-col justify-center items-center">
-                            <img
+                <div className="flex flex-col gap-6 sm:flex-row">
+                    <div className="flex flex-col items-center gap-2">
+                        <Avatar className="h-52 w-52">
+                            <AvatarImage
                                 src="/accountImage.jpg"
-                                alt="UserImage"
-                                className="rounded-full"
+                                alt={user.username}
                             />
-                            <p>{user.username}</p>
-                        </div>
-                        <form className="flex flex-col w-full mr-5">
-                            <div className="flex flex-col m-5 w-full">
-                                <p>Username</p>
-                                <input
-                                    type="text"
-                                    className="bg-white w-full p-1"
-                                    id="username"
-                                    value={username}
-                                    onChange={(e) =>
-                                        setUsername(e.target.value)
-                                    }
-                                />
-                                <p>First name</p>
-                                <input
-                                    type="text"
-                                    className="bg-white w-full p-1"
-                                    id="firstName"
-                                    value={firstName}
-                                    onChange={(e) =>
-                                        setFirstName(e.target.value)
-                                    }
-                                />
-                                <p>Last name</p>
-                                <input
-                                    type="text"
-                                    className="bg-white w-full p-1"
-                                    id="lastName"
-                                    value={lastName}
-                                    onChange={(e) =>
-                                        setLastName(e.target.value)
-                                    }
-                                />
+                            <AvatarFallback>
+                                {user.username.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
+                        <Badge className="text-sm w-full items-center flex justify-center font-bold">
+                            {user.username}
+                        </Badge>
+                    </div>
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="flex-1 space-y-4 flex flex-col"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="username"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Username</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="firstName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>First name</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="lastName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Last name</FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="w-full flex justify-end">
+                                <Button
+                                    type="submit"
+                                    className="w-full sm:w-min"
+                                >
+                                    Confirm
+                                </Button>
                             </div>
                         </form>
-                    </div>
+                    </Form>
                 </div>
             </CardContent>
-            <CardFooter className="flex justify-end pb-0">
-                <Button
-                    size="default"
-                    className="bg-black text-white hover:text-primary-foreground hover:bg-muted-foreground"
-                    onClick={handleConfirmClick}
-                >
-                    Confirm
-                </Button>
-            </CardFooter>
         </Card>
     );
-};
+}

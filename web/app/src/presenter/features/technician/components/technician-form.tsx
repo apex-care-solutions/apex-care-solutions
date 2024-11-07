@@ -21,10 +21,10 @@ export function TechnicianForm({
     serviceOptions: Service[];
 }) {
     const [services, setServices] = useState<string[]>([]);
-    const [authUser, setAuthUser] = useSession();
+    const [_, setAuthUser] = useSession();
 
     async function handleRegisterTechnician() {
-        let { data: technician, redirect } = await registerTechnicianMe(
+        const { data: technician, redirect } = await registerTechnicianMe(
             services,
         );
         if (technician) {
