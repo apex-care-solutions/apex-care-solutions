@@ -1,10 +1,19 @@
 "use client";
 
 import { cn } from "@/presenter/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function Checkboxes({ data }: { data: string[] }) {
+export function Checkboxes({
+    data,
+    onChange,
+}: {
+    data: string[];
+    onChange: (data: string[]) => void;
+}) {
     const [checks, setChecks] = useState<string[]>([]);
+    useEffect(() => {
+        onChange(checks);
+    }, [checks]);
 
     return (
         <div

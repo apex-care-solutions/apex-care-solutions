@@ -1,22 +1,7 @@
 "use server";
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
-import { JWT_SECRET } from "../../utils/env";
 import { createResponse } from "../../utils/api";
 import { prisma } from "@/repository/database";
-
-async function getUserIdFromToken(): Promise<number | null> {
-    const nextCookies = await cookies();
-    const token = nextCookies.get("token")?.value;
-    if (!token) return null;
-
-    try {
-        const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
-        return (payload as { id: number }).id;
-    } catch {
-        return null;
-    }
-}
+import { getUserIdFromToken } from "./auth-actions";
 
 export async function createChat() {
     "use server";

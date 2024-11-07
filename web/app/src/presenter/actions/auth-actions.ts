@@ -37,32 +37,49 @@ export async function registerUser(user: {
     }
 }
 
+export async function setUserToken(user: Partial<User>){
+    const token = await new SignJWT(user)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .sign(new TextEncoder().encode(JWT_SECRET));
+
+    const nextCookies = await cookies();
+    nextCookies.set("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+    });
+}
+
 export async function loginUser({username, password}:{username: string, password: string}):Promise<APIResponse<UserAuth | undefined>>  {
     try {
         const userRepository = new UserRepository();
         const user = await userRepository.findByUsername(username);
-        if (!user || !(await verifyPassword(password, user.password))) {
+        
+        if (!user || !(await verifyPassword(password, user.password)))
             return createResponse({status: "UNAUTHORIZED", error: "Invalid credentials"}) as APIResponse<undefined>;
-        }
 
         const { password: _, ...secureUser } = user;
 
-        const token = await new SignJWT(secureUser)
-            .setProtectedHeader({ alg: "HS256" })
-            .setIssuedAt()
-            .sign(new TextEncoder().encode(JWT_SECRET));
-
-        const nextCookies = await cookies();
-        nextCookies.set("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-        });
+        await setUserToken(secureUser)
 
         return createResponse<UserAuth>({status: "OK", data: secureUser, redirect: "/"}) as APIResponse<UserAuth>;
     } catch (e) {
         console.error("Login error:", e);
         return createResponse({status: "INTERNAL_SERVER_ERROR", error: e as string}) as APIResponse<undefined>;
+    }
+}
+
+export async function getUserIdFromToken(): Promise<number | null> {
+    const nextCookies = await cookies();
+    const token = nextCookies.get("token")?.value;
+    if (!token) return null;
+
+    try {
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
+        return (payload as { id: number }).id;
+    } catch {
+        return null;
     }
 }
 

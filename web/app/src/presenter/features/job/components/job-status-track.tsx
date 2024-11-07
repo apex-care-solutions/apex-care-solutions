@@ -1,19 +1,36 @@
 "use client";
-import { useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { JobStatus } from "@/domain/models/job-status";
 import { JobStatusUpdate } from "@/domain/models/job-status-update";
 import { cn } from "@/presenter/lib/utils";
+import { jobStatusUpdate } from "@/presenter/actions/job-actions";
+import { Job } from "@prisma/client";
 
 export function JobStatusTrack({
+    job,
     jobStatuses,
     jobStatusUpdates,
+    control,
 }: {
+    job: Job;
     jobStatuses: JobStatus[];
     jobStatusUpdates: JobStatusUpdate[];
+    control?: boolean;
 }) {
-    const [formattedDates, setFormattedDates] = useState<string[]>([]);
-    const highestJobStatus = Math.max(
+    const [formattedDates, setFormattedDates] = useState<ReactNode[]>([]);
+    const highestJobStatusUpdate = Math.max(
         ...jobStatusUpdates.map((jsu) => jsu.jobStatusId),
+    );
+
+    const highestJobStatus = Math.max(...jobStatuses.map((jsu) => jsu.id));
+
+    const handleUpdate = useCallback(
+        (jobStatusId: number) => {
+            jobStatusUpdate(job.id, jobStatusId).then(({ redirect }) => {
+                if (redirect) window.location.href = redirect;
+            });
+        },
+        [job],
     );
 
     useEffect(() => {
@@ -21,12 +38,28 @@ export function JobStatusTrack({
             const statusUpdate = jobStatusUpdates.find(
                 (jsu) => jsu.jobStatusId === status.id,
             );
-            return statusUpdate
-                ? new Date(statusUpdate.updatedAt).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "2-digit",
-                  })
-                : "-";
+            return statusUpdate ? (
+                new Date(statusUpdate.updatedAt)
+                    .toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })
+                    .replace(",", "")
+            ) : control && highestJobStatusUpdate + 1 == status.id ? (
+                <div
+                    onClick={() => {
+                        handleUpdate(status.id);
+                    }}
+                    className="text-accent font-bold hover:text-accent active:text-blue-800 select-none !cursor-pointer"
+                >
+                    Complete
+                </div>
+            ) : (
+                "-"
+            );
         });
         setFormattedDates(dates);
     }, [jobStatuses, jobStatusUpdates]);
@@ -40,16 +73,20 @@ export function JobStatusTrack({
                         key={status.id}
                         className="flex flex-col items-center gap-2.5 text-xs"
                     >
-                        <p>{formattedDates[index]}</p>
+                        <div>{formattedDates[index] || "-"}</div>
                         <div
                             className={cn(
                                 "w-3.5 h-3.5 border-2 rounded-full border-accent bg-primary-foreground",
+                                highestJobStatus == highestJobStatusUpdate &&
+                                    "bg-accent",
                                 formattedDates[index] !== "-" &&
-                                    status.id !== highestJobStatus &&
+                                    status.id !== highestJobStatusUpdate &&
                                     "bg-accent",
                                 formattedDates[index] === "-" &&
                                     "border-border",
-                                status.id === highestJobStatus &&
+                                status.id === highestJobStatusUpdate + 1 &&
+                                    highestJobStatus !=
+                                        highestJobStatusUpdate &&
                                     "transition-all animate-pulse-accent",
                             )}
                         ></div>

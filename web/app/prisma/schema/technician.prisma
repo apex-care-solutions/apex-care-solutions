@@ -17,6 +17,6 @@ model TechnicianService {
     userId              Int
     user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)          
     jobs                Job[]
-    technicianSkills    TechnicianService[]
+    technicianServices    TechnicianService[]
     @@unique([userId])
   }

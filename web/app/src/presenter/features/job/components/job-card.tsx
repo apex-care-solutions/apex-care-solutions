@@ -6,6 +6,7 @@ import { MessageBubble } from "../../chat/components/message-bubble";
 import { TechnicianHoverCard } from "../../technician/components/technician-hover-card";
 import { JobDetails, JobStatus } from "@/domain/models";
 import Link from "next/link";
+import { cn } from "@/presenter/lib/utils";
 
 let technician: {
     id: number;
@@ -26,10 +27,16 @@ let technician: {
 export function JobCard({
     job,
     jobStatuses,
+    control,
 }: {
     job: JobDetails;
     jobStatuses: JobStatus[];
+    control?: boolean;
 }) {
+    const complete = !!(
+        job.jobStatusUpdates.slice(-1)[0]?.jobStatus.status == "Complete"
+    );
+
     return (
         <Card className="flex flex-col p-5 gap-10">
             <div className="w-full transition duration-200 flex justify-between items-center">
@@ -47,6 +54,8 @@ export function JobCard({
             <JobStatusTrack
                 jobStatuses={jobStatuses}
                 jobStatusUpdates={job.jobStatusUpdates}
+                control={control}
+                job={job}
             />
             <div className="flex gap-10 items-stretch">
                 <MessageBubble
@@ -59,8 +68,13 @@ export function JobCard({
                 </MessageBubble>
                 <div className="flex flex-col gap-5">
                     <div className="flex items-center justify-between gap-5 items">
-                        <div className="flex justify-center bg-accent text-white p-2 rounded flex-1">
-                            In Progress
+                        <div
+                            className={cn(
+                                "flex justify-center text-white p-2 rounded flex-1",
+                                complete ? "bg-green-600" : "bg-accent",
+                            )}
+                        >
+                            {complete ? "Completed" : "In Progress"}
                         </div>
                     </div>
                     <div className="flex gap-10 items-stretch">

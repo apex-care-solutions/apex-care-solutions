@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/repository/database';
 import { authenticateRequest } from '@/presenter/actions/auth-actions';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: NextRequest, { params }: { params: { chatId: string } }) {
     const authUser = await authenticateRequest(req);
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
             },
         });
 
+        
 
         const chat = await prisma.chat.update({
             where: {
@@ -37,6 +39,8 @@ export async function POST(req: NextRequest, { params }: { params: { chatId: str
                 active: false
             }
         })
+
+        revalidatePath("/");
 
         return NextResponse.json(jobRequest);
     } catch (error) {
