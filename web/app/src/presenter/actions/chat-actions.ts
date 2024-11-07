@@ -1,22 +1,9 @@
 "use server";
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
-import { JWT_SECRET } from "../../utils/env";
 import { createResponse } from "../../utils/api";
 import { prisma } from "@/repository/database";
-
-async function getUserIdFromToken(): Promise<number | null> {
-    const nextCookies = await cookies();
-    const token = nextCookies.get("token")?.value;
-    if (!token) return null;
-
-    try {
-        const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
-        return (payload as { id: number }).id;
-    } catch {
-        return null;
-    }
-}
+import { getUserIdFromToken } from "./auth-actions";
+import { APIResponse } from "@/domain/api/api-response";
+import { ChatMessage } from "@prisma/client";
 
 export async function createChat() {
     "use server";
@@ -64,19 +51,19 @@ export async function getChatMessages(chatId: number) {
     }
 }
 
-export async function createChatMessage(chatId: number, message: string) {
+export async function createChatMessage(chatId: number, message: string): Promise<APIResponse<ChatMessage | undefined>> {
     "use server";
     const userId = await getUserIdFromToken();
-    if (!userId) return createResponse({status: "UNAUTHORIZED", error: "Unauthorized"});
+    if (!userId) return createResponse({status: "UNAUTHORIZED", error: "Unauthorized"}) as APIResponse<undefined>;
 
     try {
         const chatMessage = await prisma.chatMessage.create({
             data: { message, chatId, userId },
         });
-        return createResponse({status: "OK", data: chatMessage});
+        return createResponse({status: "OK", data: chatMessage}) as APIResponse<ChatMessage>;
     } catch (e) {
         console.error(e);
-        return createResponse({status:"INTERNAL_SERVER_ERROR", error: String(e)});
+        return createResponse({status:"INTERNAL_SERVER_ERROR", error: String(e)}) as APIResponse<undefined>;
     }
 }
 

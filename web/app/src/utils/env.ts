@@ -1,5 +1,5 @@
 function requireEnv<T>(varName: string, defaultValue: T): T {
-    let envVar = process.env[varName] as T;
+    const envVar = process.env[varName] as T;
     if (!envVar) {
         console.warn(
             `Environment variable \`${varName}\` is not set.\nReverting to default.`,

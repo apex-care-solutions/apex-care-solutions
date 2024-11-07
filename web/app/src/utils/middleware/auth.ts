@@ -3,7 +3,6 @@ import { Middleware, MiddlewareNext, MiddlewarePayload } from ".";
 import { jwtVerify } from "jose";
 import { JWT_SECRET } from "@/utils/env";
 import { authenticateRequest } from "@/presenter/actions/auth-actions";
-import { createResponse } from "../api";
 
 export const strictlyAuthorized =
   (redirectUrl: string) =>

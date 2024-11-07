@@ -1,10 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function Footer() {
     return (
         <div className="bg-black mt-4 rounded-lg">
             <div className="flex justify-between p-20">
-                <img src="/apex-logo.svg" alt="Apex logo" className="h-20" />
+                <Image
+                    src="/assets/apex-logo.svg"
+                    alt="Apex logo"
+                    className="h-20"
+                    width={200}
+                    height={100}
+                />
                 <div className="flex gap-10">
                     <div className="text-white flex flex-col gap-5">
                         <h1 className="font-bold text-xl">Account</h1>

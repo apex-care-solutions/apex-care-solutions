@@ -1,0 +1,1 @@
+export type { TechnicianService } from "@prisma/client";

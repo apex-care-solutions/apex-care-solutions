@@ -1,15 +1,18 @@
 "use client";
 import { Card, CardContent, CardHeader } from "@/presenter/components/ui/card";
+import { cn } from "@/presenter/lib/utils";
 import { ReactNode, useEffect, useState } from "react";
 
 export function MessageBubble({
     username,
     timestamp,
     children,
+    oneline,
 }: {
     username: string;
     timestamp?: Date;
     children: ReactNode;
+    oneline?: boolean;
 }) {
     const [formattedTimestamp, setFormattedTimestamp] = useState("");
 
@@ -35,7 +38,16 @@ export function MessageBubble({
                     {timestamp && <p>{formattedTimestamp}</p>}
                 </div>
             </CardHeader>
-            <CardContent>{children}</CardContent>
+            <CardContent>
+                <div
+                    className={cn(
+                        oneline && "text-nowrap overflow-hidden text-ellipsis",
+                    )}
+                >
+                    {" "}
+                    {children}
+                </div>
+            </CardContent>
         </Card>
     );
 }

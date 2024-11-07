@@ -12,8 +12,8 @@ export async function JobsView() {
     return (
         <div className="flex flex-col gap-5">
             {jobs && jobs?.length > 0 ? (
-                jobs?.map((job, i) => (
-                    <JobCard job={job} jobStatuses={jobStatuses} />
+                jobs?.map((job) => (
+                    <JobCard key={job.id} job={job} jobStatuses={jobStatuses} />
                 ))
             ) : (
                 <div className="w-full h-full flex flex-col justify-center items-center gap-10 min-h-[75vh] rounded-lg">

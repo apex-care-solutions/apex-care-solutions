@@ -1,3 +1,5 @@
+"use client";
+import { logoutUser } from "@/presenter/actions/auth-actions";
 import {
     Card,
     CardContent,
@@ -5,73 +7,45 @@ import {
     CardHeader,
     CardTitle,
 } from "@/presenter/components/ui/card";
+import { Separator } from "@/presenter/components/ui/separator";
+import Link from "next/link";
 
-type SettingOption =
-    | "account"
-    | "privacy"
-    | "safety"
-    | "notifications"
-    | "subscriptions"
-    | "appearance";
-
-type SettingsCardProps = {
-    onSelectSetting: (setting: SettingOption) => void;
-};
-
-export const SettingsCard: React.FC<SettingsCardProps> = ({
-    onSelectSetting,
-}) => {
+export const SettingsCard: React.FC = () => {
     return (
         <Card className="bg-neutral-100 h-full flex flex-col">
             <CardHeader>
                 <CardTitle>Settings</CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow">
-                <div className="flex flex-col border-b-2 p-2">
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("account")}
-                    >
+            <CardContent className="flex-grow flex flex-col gap-1">
+                <div className="flex flex-col p-2 gap-1">
+                    <Link href="/account" className="text-left">
                         Account
-                    </button>
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("privacy")}
-                    >
-                        Privacy
-                    </button>
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("safety")}
-                    >
-                        Safety
-                    </button>
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("notifications")}
-                    >
+                    </Link>
+                    <Link href="/account/notifications" className="text-left">
                         Notifications
-                    </button>
+                    </Link>
                 </div>
-                <div className="flex flex-col border-b-2 p-2">
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("subscriptions")}
-                    >
-                        Subscriptions
-                    </button>
-                </div>
+                <Separator orientation="horizontal" />
                 <div className="flex flex-col p-2">
-                    <button
-                        className="text-left"
-                        onClick={() => onSelectSetting("appearance")}
-                    >
+                    <Link href="/account/subscriptions" className="text-left">
+                        Subscriptions
+                    </Link>
+                </div>
+                <Separator orientation="horizontal" />
+                <div className="flex flex-col p-2">
+                    <Link href="/account/appearance" className="text-left">
                         Appearance
-                    </button>
+                    </Link>
                 </div>
             </CardContent>
             <CardFooter className="flex">
-                <p className="text-red-500 hover:underline cursor-pointer">
+                <p
+                    className="text-red-500 hover:underline cursor-pointer"
+                    onClick={async () => {
+                        let { redirect } = await logoutUser();
+                        if (redirect) window.location.href = redirect;
+                    }}
+                >
                     Sign out
                 </p>
             </CardFooter>
